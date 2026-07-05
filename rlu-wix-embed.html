@@ -1,0 +1,3399 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RLU Phrapokklao Hospital</title>
+  <link rel="icon" type="image/png"
+href="https://drive.google.com/thumbnail?id=1MNDFhTsYwnmYeMaBP3QXh-WBM-WR3JM8">
+  <meta name="google-site-verification" content="QbZmpyDjuXUuyRo-ysiwD-SOA03eKammGUd3uOohslI" />
+  <meta name="description" content="RLU Dashboard โรงพยาบาลพระปกเกล้า แสดงตัวชี้วัด KPI และข้อมูล RLU จังหวัดจันทบุรี แบบเรียลไทม์">
+
+<meta name="keywords" content="RLU, รพ จันทบุรี, โรงพยาบาลพระปกเกล้า, KPI RLU, Lab RLU, RLU จันทบุรี">
+
+<meta property="og:title" content="RLU Dashboard โรงพยาบาลพระปกเกล้า">
+<meta property="og:description" content="ระบบติดตาม KPI และตัวชี้วัด RLU ของโรงพยาบาลพระปกเกล้า จังหวัดจันทบุรี">
+<base target="_top">
+
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+
+
+
+<style>
+
+body{
+font-family:'Prompt',sans-serif;
+margin:0;
+  overflow-x:hidden;
+box-sizing:border-box;
+  background:linear-gradient(to bottom, #ffffff, #f7f7f7);
+}
+#welcomePopup{
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+
+  display:none;
+
+  justify-content:center;  /* 🔥 แนวนอน */
+  align-items:center;      /* 🔥 แนวตั้ง */
+
+  background: rgba(0,0,0,0.5);
+  z-index:9999;
+}
+
+.popup-box{
+  max-width:500px;
+  width:90%;
+  max-height:90vh;  /* 🔥 กันติดขอบ */
+  overflow:auto;
+
+  background:white;
+  padding:15px;
+  border-radius:16px;
+  text-align:center;
+}
+
+.popup-box img{
+  width:100%;
+  height:auto;
+  max-height:70vh;   /* 🔥 สำคัญ */
+  object-fit:contain; /* 🔥 ไม่ตัด */
+  border-radius:10px;
+}
+.popup-box button{
+  margin:20px;
+  padding:12px 25px;
+  border:none;
+  background:#C9435A;
+  color:white;
+  border-radius:999px;
+  cursor:pointer;
+}
+/* HEADER */
+.header{
+  display:flex;
+  align-items:center;
+  padding:10px 20px;
+  background:#EAE6E3;
+  gap:15px;
+    width:100%;
+  box-sizing:border-box;
+}
+
+/* 🔥 สำคัญ */
+.logo{
+  height:70px;
+  flex-shrink:0;
+}
+
+.banner{
+  flex:1;
+  margin:0 20px;
+  height:180px;
+  object-fit:contain;
+  border-radius:12px;
+  max-width:100%; /* ✅ กันดัน layout */
+  flex:1;        /* ให้ยืด */
+  min-width:0;   /* 🔥 สำคัญมาก */
+}
+
+.login-btn{
+  background: linear-gradient(135deg, #C9435A, #E86B7C);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+   white-space:nowrap; /* ✅ กันปุ่มยืด */
+   margin-left:10px;   /* 🔥 ตัวนี้แหละ */
+     flex-shrink:0;   /* 🔥 กันหด */
+}
+
+.login-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+.login-btn:active{
+  transform: scale(0.96);
+}
+
+/* MENU */
+nav{
+  display:flex;
+  justify-content:space-around;
+  gap:60px;
+  padding:14px;
+  background:#EAE6E3;
+  margin:0;
+  width:100%;
+}
+
+nav button{
+  background:none;
+  border:none;
+  color:#555;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  position:relative;
+}
+
+/* hover effect */
+nav button:hover{
+  color:#C9435A;
+}
+
+/* เส้น underline animation */
+nav button::after{
+  content:"";
+  position:absolute;
+  bottom:-5px;
+  left:0;
+  width:0%;
+  height:2px;
+  background:#C9435A;
+  transition:0.3s;
+}
+
+nav button:hover::after{
+  width:100%;
+}
+nav{
+  backdrop-filter: blur(10px);
+}
+nav{
+  justify-content:space-around; /* 🔥 กระจายเต็ม */
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:80px;
+  padding:14px;
+  background:#EAE6E3;
+}
+
+/* DROPDOWN */
+/* ทำให้ dropdown เป็นเหมือนปุ่ม nav */
+nav .dropdown{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+
+/* ใช้ style เดียวกับ nav button */
+nav .dropbtn{
+  background:none;
+  border:none;
+  color:#555;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  position:relative;
+}
+
+/* hover เหมือนปุ่มอื่น */
+nav .dropbtn:hover{
+  color:#C9435A;
+}
+
+/* underline animation เหมือนปุ่ม */
+nav .dropbtn::after{
+  content:"";
+  position:absolute;
+  bottom:-5px;
+  left:0;
+  width:0%;
+  height:2px;
+  background:#C9435A;
+  transition:0.3s;
+}
+
+nav .dropbtn:hover::after{
+  width:100%;
+}
+
+/* dropdown */
+.dropdown{
+  position:relative;
+  display:flex;
+  align-items:center;
+  padding-bottom:10px; /* 🔥 กันเมาส์หลุด */
+}
+
+.dropdown-content{
+  display:none;
+  position:absolute;
+  top:100%;   /* 🔥 ชิดปุ่มแทน 40px */
+  left:0;
+  background:white;
+  min-width:200px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.12);
+  z-index:999;
+}
+
+.dropdown-content a{
+  display:block;
+  padding:12px;
+  text-decoration:none;
+  color:#444;
+}
+
+.dropdown-content a:hover{
+  background:#f5f5f5;
+  color:#C9435A;
+}
+
+/* hover แสดง */
+.dropdown:hover .dropdown-content{
+  display:block;
+}
+
+/* CONTENT */
+.container{
+  padding:30px 30px;
+  max-width:1400px;
+  margin:auto;
+  background:transparent; /* 🔥 เพิ่ม */
+}
+
+/* iframe drive */
+.drive-frame{
+width:100%;
+height:600px;
+border:none;
+border-radius:12px;
+background:white;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* HOME */
+.home-grid{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.home-card{
+  flex:1;
+  min-width:220px;
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  transition:0.3s;
+}
+
+.home-card:hover{
+  transform:translateY(-5px);
+}
+
+h2,h3{
+font-family:'Prompt',sans-serif;
+color:#C9435A;
+}
+/*Dashboard KPI หน้าหลัก*/
+#homeDonut{
+  width:100% !important;
+  height:260px !important;
+}
+
+
+.kpi-highlight{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.kpi-box{
+  flex:1;
+  min-width:200px;
+  background:white;   /* ✅ ห้าม whitee */
+  padding:20px;
+  border-radius:16px;
+  text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  transition:0.2s;
+}
+
+.kpi-box h1{
+  margin:0;
+  font-size:32px;
+}
+
+.kpi-box:hover{
+  transform:translateY(-4px);
+}
+
+.pyramid{
+  font-family:'Mitr',sans-serif; /* 🔥 ตัวนี้ */
+  color:white;
+  padding:16px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.3s;
+  text-align:center;
+  width:100%;
+  margin:10px auto;
+  backdrop-filter: blur(6px);
+  background: rgba(74,111,165,0.9);
+}
+
+/* ไล่ระดับเหมือนพีระมิด */
+.step1{
+  background:#4A6FA5;
+  width:90%;
+}
+.step2{
+  background:#5C8BBF;
+  width:75%;
+}
+.step3{
+  background:#6fa4d6;
+  width:60%;
+}
+.step4{
+  background:#D97B7B;
+  width:45%;
+}
+
+.pyramid:hover{
+  transform:scale(1.05);
+  box-shadow:0 6px 15px rgba(0,0,0,0.2);
+}
+.kpi-card-left,
+.rlu-card{
+  background:transparent;
+  padding:0px;
+  border-radius:16px;
+  box-shadow:none;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.panel{
+  flex:1;
+  min-width:320px;
+  background:transparent;
+  padding:0;
+  box-shadow:none;
+}
+
+.main-flex{
+  display:flex;
+  gap:30px;
+  margin-top:30px;
+  align-items:stretch;
+  flex-wrap:wrap;
+  justify-content:space-between;
+}
+
+.main-card{
+  flex:none;   /* 🔥 ฉลาดขึ้น */
+  background:transparent;   /* 🔥 เอาขาวออก */
+  padding:0;                /* 🔥 เอากรอบออก */
+  box-shadow:none;          /* 🔥 เอาเงาออก */
+  border-radius:16px;
+}
+
+.feature-section{
+  margin-top:50px;
+  padding:40px 20px;
+  background:#f1f3f5; /* 🔥 เข้มกว่าพื้นหลังนิดเดียว */
+  border-radius:20px;
+}
+
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:25px;
+}
+
+.feature-card{
+  text-align:center;
+  transition:0.25s;
+}
+
+.feature-card img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+
+.feature-title{
+  font-weight:600;
+  margin-bottom:5px;
+}
+
+.feature-desc{
+  font-size:13px;
+  color:#666;
+}
+
+.feature-card:hover{
+  transform:translateY(-5px);
+}
+
+/* 📱 mobile */
+@media(max-width:768px){
+  #featureForm > div{
+    grid-template-columns:repeat(2,1fr) !important;
+  }
+}
+.file-card{
+  width:180px;
+  background:white;
+  border-radius:14px;
+  padding:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  text-align:center;
+  transition:0.2s;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.file-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 8px 18px rgba(0,0,0,0.15);
+}
+
+.file-card img{
+  width:100%;
+  height:120px;
+  object-fit:cover;
+  border-radius:8px;
+  margin-bottom:10px; /* 🔥 เว้นระยะ */
+}
+
+.file-name{
+  font-size:13px;
+  color:#333;
+  margin-top:5px;
+  line-height:1.4;
+  height:40px;              /* 🔥 บังคับความสูง */
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+}
+  .file-grid{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:15px;
+}
+/* POPUP */
+.msg{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#2e7d32;
+color:white;
+padding:16px 30px;
+border-radius:10px;
+display:none;
+z-index:999;
+font-size:18px;
+}
+/*upload*/
+.input-group{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.input-modern{
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:14px;
+  transition:0.2s;
+}
+
+.input-modern:focus{
+  outline:none;
+  border-color:#C9435A;
+  box-shadow:0 0 0 2px rgba(201,67,90,0.15);
+}
+
+.btn-modern{
+  background:#C9435A;
+  color:white;
+  border:none;
+  padding:10px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.btn-modern:hover{
+  background:#B0364C;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+/*login*/
+.login-overlay{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.login-card{
+  background:white;
+  padding:30px;
+  border-radius:16px;
+  width:300px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+  animation:fadeIn 0.3s ease;
+}
+
+.btn-cancel{
+  margin-top:10px;
+  background:#ddd;
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+}
+/*กราฟเดี่ยว*/
+#kpiSingle canvas{
+  width:100% !important;
+  height:450px !important; /* 🔥 ปรับตรงนี้ */
+}
+/*กราฟรวม*/
+#kpiAll > div{
+  width:48%;
+  min-height:260px; /* 🔥 กันเตี้ย */
+}
+.kpi-card{
+  width:48%;
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  box-sizing:border-box;
+}
+
+/* 📱 มือถือ */
+@media (max-width:768px){
+  .kpi-card{
+    width:100% !important;
+  }
+}
+
+#kpiAll canvas{
+  width:100% !important;
+}
+/*ในโทรศัพท์*/
+@media (max-width:768px){
+
+  #kpiAll > div{
+    width:100% !important;
+  }
+
+  #kpiSingle canvas{
+    height:280px !important;
+  }
+
+}
+#home > div{
+  background:transparent !important;
+  box-shadow:none !important;
+}
+.main-card,
+.home-card,
+.kpi-card-left,
+.rlu-card{
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+@keyframes fadeIn{
+  from{ transform:translateY(20px); opacity:0; }
+  to{ transform:translateY(0); opacity:1; }
+}
+
+.manual-section{
+  background:white;
+  padding:20px;
+  border-radius:16px;
+  margin-bottom:20px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  line-height:1.7;
+}
+
+.manual-section h3{
+  color:#C9435A;
+  margin-top:0;
+}
+
+.manual-section.highlight{
+  background:linear-gradient(135deg,#fff,#fbe9e7);
+  border-left:5px solid #C9435A;
+}
+.home-banner{
+  position:relative;
+  margin-top:50px;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 8px 25px rgba(0,0,0,0.1);
+  background:#FDFCFC;  /* กันโล่ง */
+}
+
+/* รูป */
+.home-banner img{
+  width:100%;
+  height:auto;        /* 🔥 เปลี่ยนตัวนี้ */
+  object-fit:contain; /* 🔥 เปลี่ยนตัวนี้ */
+}
+
+/* ปุ่มลอย */
+.banner-btn{
+  position:absolute;
+  bottom:20px;
+  left:25%;
+  transform:translateX(-50%);
+  z-index:2; /* 🔥 เพิ่ม */
+}
+
+/* ปุ่ม */
+.banner-btn button{
+  background:#C9435A;
+  color:white;
+  border:none;
+  padding:12px 26px;
+  border-radius:999px;
+  font-size:14px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.25);
+}
+
+.banner-btn button:hover{
+  transform:translateY(-2px);
+  background:#B0364C;
+}
+.home-banner::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,0.2), transparent);
+}
+  .site-footer{
+  background:linear-gradient(135deg,#fff,#f3f3f3);
+  border-top:2px solid #C9435A;
+  margin-top:60px;
+}
+
+.footer-content{
+  max-width:1200px;
+  margin:auto;
+  padding:40px 20px;
+  text-align:center;
+}
+
+.footer-content h3::after{
+  content:"";
+  display:block;
+  width:60px;
+  height:3px;
+  background:#C9435A;
+  margin:8px auto 0;
+}
+
+.footer-content p{
+  color:#555;
+  font-size:14px;
+  line-height:1.8;
+}
+  
+</style>
+
+</head>
+
+<body>
+<script>
+/* Wix embed safety: sandboxed iframes may block web storage. Fall back to in-memory so the app never crashes. */
+(function(){function mem(){var d={};return{getItem:function(k){return k in d?d[k]:null;},setItem:function(k,v){d[k]=String(v);},removeItem:function(k){delete d[k];},clear:function(){d={};}};}try{window.localStorage.getItem("__t");}catch(e){try{Object.defineProperty(window,"localStorage",{value:mem()});}catch(_){}}try{window.sessionStorage.getItem("__t");}catch(e){try{Object.defineProperty(window,"sessionStorage",{value:mem()});}catch(_){}}})();
+</script>
+
+  <!-- welcome popup splash removed for Wix embed -->
+
+<div id="msgBox" class="msg"></div>
+
+<!-- HEADER removed for Wix embed: the Wix page header/logo is used instead. Admin login button moved into the sub-nav. -->
+
+<div id="loginBox" class="login-overlay">
+
+  <div class="login-card">
+
+    <h2>🔐 Log in</h2>
+
+    <input id="user" class="input-modern" placeholder="Username"><br><br>
+
+    <input id="pass" type="password" class="input-modern"
+    placeholder="Password"
+    onkeypress="if(event.key === 'Enter'){ doLogin(); }"><br><br>
+
+    <button class="btn-modern" onclick="doLogin()">Login</button>
+    <button class="btn-cancel" onclick="closeLogin()">Cancel</button>
+
+  </div>
+
+</div>
+
+<!-- MENU -->
+<nav>
+<button onclick="showPage('home')">หน้าหลัก</button>
+<button onclick="showPage('documents')">เอกสารสำคัญ</button>
+<button onclick="showPage('guideline')">RLU Guideline</button>
+<button onclick="showPage('kpi')">ตัวชี้วัด</button>
+<button onclick="showPage('manual')">คู่มือ</button>
+<div class="dropdown">
+  <button class="dropbtn">เว็บไซต์ที่เกี่ยวข้อง</button>
+
+  <div class="dropdown-content">
+    <a href="https://hdc.moph.go.th/center/public/standard-subcatalog/9d8c311d6336373d40437c4423508cad" target="_blank">HDC</a>
+    <a href="https://stgthos.moph.go.th/S2G-trathosp/ct_ratio_dashboard.php" target="_blank">S2G</a>
+    <a href="https://rluthailand.com/index.php" target="_blank">RLU Thailand</a>
+    <a href="https://rluthailand.com/labex/labex.php" target="_blank">Lab Ex</a>
+  </div>
+</div>
+<button class="login-btn" onclick="openLogin()">Login</button>
+</nav>
+
+<div class="container">
+
+<!-- HOME -->
+<div id="home">
+<div style="text-align:center;margin-bottom:30px;">
+
+  <h1 style="
+    margin:0;
+    font-weight:600;
+    color:#C9435A;
+    letter-spacing:1px;
+  ">
+    โรงพยาบาลพระปกเกล้า
+  </h1>
+
+  <div style="
+    width:80px;
+    height:3px;
+    background:#C9435A;
+    margin:12px auto;
+    border-radius:2px;
+  "></div>
+
+  <p style="
+    max-width:600px;
+    margin:auto;
+    color:#666;
+    font-size:14px;
+    line-height:1.6;
+  ">
+    <!-- 👇 เจเนทใส่เจตนารมณ์ตรงนี้ -->
+    เราจะใช้ทรัพยากรอย่างคุ้มค่าและเกิดประโยชน์สูงสุด โดยคำนึงถึงความปลอดภัยของผู้ป่วยเป็นสำคัญ
+  </p>
+
+</div>
+
+<div class="main-flex">
+
+  <div class="kpi-card-left">
+    <!-- ใส่ content เดิม -->
+  </div>
+
+  <div class="rlu-card">
+    <!-- ใส่ content เดิม -->
+  </div>
+
+</div>
+
+<div style="
+  display:flex;
+  gap:30px;
+  margin-top:30px;
+  flex-wrap:wrap;
+">
+
+  <!-- LEFT -->
+<div style="
+  flex:1;
+  min-width:320px;
+  background:transparent;
+  padding:0px;
+  border-radius:16px;
+  box-shadow:none;
+  text-align:center;
+">
+
+  <h3 style="margin-bottom:15px;">Dashboard KPI</h3>
+
+  <div style="max-width:260px;margin:auto; position:relative;">
+    <canvas id="homeDonut"></canvas>
+  </div>
+
+  <!-- donut summary -->
+  <div id="donutSummary" style="
+    margin-top:15px;
+    font-size:16px;
+    font-weight:500;
+    text-align:center;
+  "></div>
+
+  <div style="margin-top:12px;font-size:18px;font-weight:600;">
+    <span style="color:#4A6FA5;">● ผ่าน</span>
+    &nbsp;&nbsp;
+    <span style="color:#D97B7B;">● ไม่ผ่าน</span>
+  </div>
+
+  <!-- เงินหน้าหลัก -->
+  <div id="homeCostBox" style="margin-top:20px;"></div>
+
+</div>
+  
+  <!-- RIGHT -->
+  <div style="
+    flex:1;
+    min-width:320px;
+    background:transparent;
+    padding:0px;
+    border-radius:16px;
+    box-shadow:none;
+  ">
+
+    <h3 style="text-align:center;">RLU How to</h3>
+
+    <!-- 🔥 คะแนนรวม -->
+<div style="text-align:right;margin-bottom:8px;">
+
+  <div style="
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Mitr',sans-serif;
+  ">
+    <span style="
+      font-size:12px;
+      color:#888;
+    ">
+      คะแนนรวม
+    </span>
+
+    <span style="
+      font-size:16px;
+      font-weight:600;
+      color:#2E7D32;
+    ">
+      100/100
+    </span>
+
+  </div>
+
+</div>
+
+    <!-- 🔥 พีระมิด -->
+    <div style="margin-top:10px;">
+
+      <div class="pyramid step4" onclick="openStep(4)">
+        <b>STEP 4</b><br>
+        การประเมินผลเชิงประจักษ์<br>
+        <small>35/35 คะแนน</small>
+      </div>
+
+      <div class="pyramid step3" onclick="openStep(3)">
+        <b>STEP 3</b><br>
+        มาตรการและนวัตกรรม IT<br>
+        <small>30/30 คะแนน</small>
+      </div>
+
+      <div class="pyramid step2" onclick="openStep(2)">
+        <b>STEP 2</b><br>
+        วิเคราะห์ข้อมูล<br>
+        <small>15/15 คะแนน</small>
+      </div>
+
+      <div class="pyramid step1" onclick="openStep(1)">
+        <b>STEP 1</b><br>
+        โครงสร้างและนโยบาย<br>
+        <small>20/20 คะแนน</small>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<div id="stepModal" style="
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(6px);
+  z-index:999;
+  justify-content:center;
+  align-items:center;
+">
+
+  <div style="
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    width:500px;
+    max-height:85%;
+    overflow:auto;
+    box-shadow:0 20px 40px rgba(0,0,0,0.2);
+    animation:fadeIn 0.3s ease;
+  ">
+
+    <h3 style="margin-top:0;color:#C9435A;">Document</h3>
+
+    <div id="stepFiles" style="margin-top:15px;"></div>
+
+    <!-- 🔐 ADMIN -->
+    <div class="admin-only" style="margin-top:25px;">
+
+      <h4 style="margin-bottom:10px;">จัดการไฟล์</h4>
+
+      <div id="stepUploadBox" style="
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+      "></div>
+
+      <button class="btn-modern" onclick="addStepInput()">+ เพิ่มช่อง</button>
+      <button class="btn-modern" onclick="saveStepFiles()">💾 บันทึก</button>
+
+    </div>
+
+    <br>
+    <button class="btn-modern" onclick="closeModal()">ปิด</button>
+
+  </div>
+</div>
+
+<div class="panel">
+
+<div class="feature-section">
+
+  <div class="feature-grid" id="featureGrid">
+    <!-- JS จะ render -->
+  </div>
+
+</div>
+
+<div class="admin-only card" style="margin-top:20px;">
+
+<h3>จัดการ Feature</h3>
+
+<div id="featureForm"></div>
+
+<button class="btn-modern" onclick="saveFeature()">💾 บันทึก</button>
+</div>
+</div> <!-- panel -->
+
+<!-- BANNER IMAGE REMOVED (was Trat-branded). Add your Phrapokklao banner later:
+     <div class="home-banner">
+       <img src="YOUR_IMAGE_URL">
+       <div class="banner-btn"><button onclick="goToDoc()" class="btn-modern">เอกสารสำคัญ</button></div>
+     </div> -->
+</div> <!-- home -->
+
+<!-- DOCUMENTS -->
+<div id="documents" style="display:none">
+
+<h2>เอกสารสำคัญ</h2>
+
+<!-- 📂 DOCUMENT -->
+<div class="card">
+  <h3>📂 เอกสารสำคัญ</h3>
+
+  <div id="docBox" class="file-grid"></div>
+</div>
+
+<br>
+
+<!-- 📑 MEETING (ADMIN ONLY) -->
+<div class="card admin-only">
+  <h3>📑 รายงานการประชุม</h3>
+
+  <div id="meetBox" class="file-grid"></div>
+</div>
+
+</div>
+
+<!-- GUIDELINE -->
+<div id="guideline" style="display:none">
+
+  <h2 style="text-align:center;">RLU GUIDELINE</h2>
+
+  <div style="
+    width:80px;
+    height:3px;
+    background:#C9435A;
+    margin:12px auto;
+    border-radius:2px;
+  "></div>
+
+  <p style="text-align:center;font-weight:500;">
+    แนวทางการตรวจทางห้องปฏิบัติการทางการแพทย์อย่างสมเหตุผล
+  </p>
+
+  <p style="
+    max-width:800px;
+    margin:auto;
+    text-align:center;
+    line-height:1.7;
+    color:#555;
+  ">
+    การตรวจทางห้องปฏิบัติการที่มากเกินไปอาจนำไปสู่การสิ้นเปลืองที่ไม่จำเป็น ในขณะที่การตรวจที่ น้อยเกินไปอาจนำไปสู่การวินิจฉัยที่ผิดพลาดหรือเกิดผลเสียหายต่อการรักษาผู้ป่วย การศึกษาของต่างประเทศพบว่า มีการสั่งตรวจที่น้อยเกินไป (Underutilization) ประมาณ 45% และมีการสั่งตรวจที่มากเกินไป (Overutilization) ประมาณ 20% ดังนั้นหากนำเอา RLU มาประยุกต์ใช้ในระบบบริการสุขภาพของประเทศที่มีค่าใช้จ่ายทางห้องปฏิบัติการเฉพาะในส่วนของกระทรวงสาธารณสุขปีละประมาณ 15,000 ล้านบาท อาจทำให้ลดค่าใช้จ่ายในส่วนนี้ลงไม่น้อยกว่า 3,000 ล้านบาทต่อปี 
+  </p>
+
+  <!-- PDF -->
+<div style="text-align:center;margin-top:30px;">
+
+  <a href="https://drive.google.com/file/d/1a-XdwCdFy2gM9Yyas6fIafRbQGJy1uPz/view" target="_blank">
+    
+    <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png"
+    style="width:80px;margin-bottom:10px;">
+
+    <div style="color:#1976d2;font-weight:500;">
+      คู่มือฉบับเต็ม RLU
+    </div>
+
+  </a>
+
+  <br><br>
+
+  <a href="https://drive.google.com/uc?export=download&id=1a-XdwCdFy2gM9Yyas6fIafRbQGJy1uPz"
+  class="btn-modern">
+    ⬇ ดาวน์โหลด
+  </a>
+
+  <div style="margin-top:10px;font-size:12px;color:#888;">
+    เวอร์ชั่น 29 พฤศจิกายน 2566
+  </div>
+
+</div>
+
+  <!-- 🔐 ADMIN EDIT -->
+  <div class="admin-only card" style="margin-top:30px;">
+    <h3>แก้ไข Guideline</h3>
+
+    <input id="guidePdf" class="input-modern" placeholder="ลิงก์ PDF"><br><br>
+    <input id="guideVer" class="input-modern" placeholder="เวอร์ชั่น"><br><br>
+
+    <button class="btn-modern" onclick="saveGuideline()">💾 บันทึก</button>
+  </div>
+
+</div>
+
+<div id="manual" style="display:none; max-width:900px; margin:auto;">
+
+  <h2 style="text-align:center;">📘 คู่มือการใช้งานระบบ RLU Digital Intelligence Website</h2>
+
+  <div style="
+    width:100px;
+    height:3px;
+    background:#C9435A;
+    margin:12px auto 30px;
+    border-radius:2px;
+  "></div>
+
+  <!-- 1 -->
+  <div class="manual-section">
+    <h3>1. บทนำระบบ</h3>
+    <p>
+      ระบบ RLU Digital Intelligence Website เป็นแพลตฟอร์มที่ใช้สำหรับรวบรวมข้อมูลเกี่ยวกับ RLU ของโรงพยาบาลพระปกเกล้าและใช้สำหรับการติดตามตัวชี้วัดของ RLU
+      โดยมีการเชื่อมโยงข้อมูลจากแหล่งข้อมูลภายนอก คือ ระบบคลังข้อมูลด้านการแพทย์และสุขภาพ (HDC) และโปรแกรม S2G for blood safety เพื่อแสดงผลในรูปแบบ Dashboard แบบ Real-time
+    </p>
+  </div>
+
+  <!-- 2 -->
+  <div class="manual-section">
+    <h3>2. สิทธิ์ผู้ใช้งาน</h3>
+    <ul>
+      <li><b>Admin:</b> สามารถอัปโหลด แก้ไข และจัดการข้อมูลทั้งหมดในระบบ</li>
+      <li><b>User:</b> สามารถเข้าดูข้อมูล Dashboard RLU Guideline และเอกสารสำคัญได้</li>
+    </ul>
+  </div>
+
+  <!-- 3 -->
+  <div class="manual-section">
+    <h3>3. โครงสร้างระบบ</h3>
+    <ul>
+      <li>Dashboard KPI แสดงผลรวมและรายตัวชี้วัด</li>
+      <li>RLU Pyramid แสดงบันไดสี่ขั้นของการจัดทำ RLU</li>
+      <li>Document Management สำหรับจัดเก็บเอกสาร</li>
+      <li>Feature Section สำหรับแสดงกิจกรรมต่างของ RLU</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div class="manual-section">
+    <h3>4. การใช้งานเมนูหลัก</h3>
+
+    <p><b>📊 ตัวชี้วัด (KPI)</b></p>
+    <ul>
+      <li>ALL: แสดงตัวชี้วัดทั้งหมดในรูปแบบกราฟ</li>
+      <li>Single: แสดงข้อมูลรายตัวชี้วัด</li>
+      <li>Custom KPI: แสดงแนวโน้มข้อมูลรายเดือน</li>
+    </ul>
+
+    <p><b>📂 เอกสารสำคัญ</b></p>
+    <ul>
+      <li>อัปโหลดและจัดเก็บเอกสารผ่าน Google Drive</li>
+    </ul>
+  </div>
+
+  <!-- 5 -->
+  <div class="manual-section highlight">
+    <h3>5. การอัปโหลดข้อมูล KPI</h3>
+    <ul>
+      <li>ใช้สำหรับตัวชี้วัดประเภทที่ต้องตรวจอย่างน้อยปีละครั้ง</li>
+      <li>รองรับไฟล์ CSV (HbA1c / LDL-Cholesterol / Creatinine)</li>
+      <li>ระบบจะทำการแทนที่ข้อมูลเดิมโดยอัตโนมัติ</li>
+      <li>โดย Admin จะอัปโหลดทุกวันศุกร์ของสัปดาห์เพื่อให้ข้อมูลเป็นปัจจุบันมากที่สุด</li>
+    </ul>
+  </div>
+
+  <!-- 6 -->
+  <div class="manual-section">
+    <h3>6. หลักเกณฑ์การประเมิน</h3>
+    <ul>
+      <li> ร้อยละของผู้ป่วยโรคเบาหวานได้รับการตรวจ HbA1c ซ้ำภายใน 90 วัน &lt; 5% </li>
+      <li> ร้อยละของผู้ป่วยโรคเบาหวานได้รับการตรวจ LDL-Cholesterol ซ้ำภายใน 90 วัน &lt; 5% </li>
+      <li> ร้อยละของผู้มารับบริการได้รับการตรวจ Total Cholesterol ซ้ำภายใน 90 วัน &lt; 5% </li>
+      <li> ร้อยละของผู้มารับบริการได้รับการตรวจ Triglycerides ซ้ำภายใน 90 วัน &lt; 5% </li>
+      <li> ร้อยละผู้ป่วยโรคเบาหวานได้รับการตรวจ HbA1c อย่างน้อยปีละ 1 ครั้ง &gt; 70% </li>
+      <li> ร้อยละของผู้ป่วยโรคเบาหวานได้รับการตรวจ LDL-Cholesterol อย่างน้อยปีละ 1 ครั้ง &gt; 70% </li>
+      <li> ร้อยละของผู้ป่วยโรคเบาหวานได้รับการตรวจ Creatinine อย่างน้อยปีละ 1 ครั้ง target &gt; 70% </li>
+      <li> อัตราการรายงานผลตรวจได้ทันตามกำหนด &gt; 99% </li>
+      <li> ลดค่าใช้จ่าย &lt; 10% </li>
+      <li> C/T Ratio &lt; 2% </li>
+    </ul>
+  </div>
+
+  <!-- 7 -->
+  <div class="manual-section">
+    <h3>7. การเชื่อมโยงข้อมูล</h3>
+    <ul>
+      <li>เชื่อมต่อ API จาก HDC กระทรวงสาธารณสุข</li>
+      <li>เชื่อมต่อ API จาก โปรแกรม S2G blood safty ของโรงพยาบาลพระปกเกล้า </li>
+      <li>รองรับข้อมูลจากไฟล์ CSV ภายในหน่วยงาน</li>
+      <li>ผสานข้อมูลเพื่อแสดงผลใน Dashboard</li>
+    </ul>
+  </div>
+
+  <!-- 8 -->
+  <div class="manual-section highlight">
+    <h3>8. ระบบแจ้งเตือน</h3>
+    <ul>
+      <li>ส่งสรุป KPI ผ่าน LINE Group</li>
+      <li>แสดงสถานะผ่าน / ไม่ผ่าน ในตัวชี้วัดหลักของ RLU</li>
+      <li>แสดง ward 7 อันดับที่ C:T Ratio มากกว่า 2 คำนวณเฉพาะ RBC และเฉพาะ ward ที่มีการใช้เลือดจริง </li>
+      <li>สามารถกดเข้าดู Dashboard ได้ทันที</li>
+    </ul>
+  </div>
+
+  <!-- 9 -->
+  <div class="manual-section">
+    <h3>9. ข้อควรระวัง</h3>
+    <ul>
+      <li>การอัปโหลดข้อมูลใหม่จะทับข้อมูลเดิม</li>
+      <li>ควรตรวจสอบไฟล์ก่อนนำเข้า</li>
+      <li>หากข้อมูลไม่แสดงให้รีเฟรชหน้าเว็บหรือติดต่อผู้ดูแลเว็บไซด์</li>
+    </ul>
+  </div>
+
+</div>
+
+<div id="kpi" style="display:none">
+
+<h2>Dashboard KPI</h2>
+<div id="kpiSummary" style="margin-bottom:20px;"></div>
+  <div id="kpiCostBox"></div>
+<!-- 🔽 dropdown -->
+<div style="margin-bottom:20px;">
+<select id="kpiSelect" onchange="onKPIChange()" 
+style="padding:10px;border-radius:8px;border:1px solid #ccc;font-size:16px;">
+
+<option value="all">ALL</option>
+<option value="0">HbA1c ซ้ำ 90 วัน</option>
+<option value="1">LDL ซ้ำ 90 วัน</option>
+<option value="2">Cholesterol ซ้ำ 90 วัน</option>
+<option value="3">Triglycerides ซ้ำ 90 วัน</option>
+<option value="4">HbA1c ปีละครั้ง</option>
+<option value="5">LDL ปีละครั้ง</option>
+<option value="6">Creatinine ปีละครั้ง</option>
+<option value="custom">อัตราการรายงานผลตรวจได้ทันตามกำหนด</option>
+<option value="ct_ratio">Top Ward C:T Ratio สูงสุด</option>
+  
+
+
+</select>
+</div>
+
+<!-- 🔥 CUSTOM KPI -->
+<div id="customSection" class="admin-only card">
+
+<h3>📌 อัตราการรายงานผลทันเวลา</h3>
+
+<div class="input-group">
+<div class="admin-only">
+<input id="yearInput" class="input-modern" placeholder="ปี">
+
+<select id="monthInput" class="input-modern">
+<option value="">เลือกเดือน</option>
+<option>ม.ค.</option>
+<option>ก.พ.</option>
+<option>มี.ค.</option>
+<option>เม.ย.</option>
+<option>พ.ค.</option>
+<option>มิ.ย.</option>
+<option>ก.ค.</option>
+<option>ส.ค.</option>
+<option>ก.ย.</option>
+<option>ต.ค.</option>
+<option>พ.ย.</option>
+<option>ธ.ค.</option>
+</select>
+
+<input id="valueInput" type="number" class="input-modern" placeholder="%">
+
+<button class="btn-modern" onclick="addData()">+ เพิ่ม</button>
+
+</div>
+</div>
+
+<br>
+
+<canvas id="customChart" height="80"></canvas>
+
+</div>
+
+<div id="ctRatioSection" style="display:none">
+  <div class="card">
+    <h3>Top Ward C:T Ratio สูงสุด</h3>
+    <div id="ctRatioMeta" style="font-size:13px;color:#666;margin-bottom:12px;"></div>
+    <div style="height:360px;">
+      <canvas id="ctRatioChart"></canvas>
+    </div>
+    <br>
+    <button class="btn-modern" onclick="loadCtRatioData()">รีเฟรช</button>
+  </div>
+</div>
+
+
+<!-- 🔥 ALL KPI -->
+<div id="kpiAll"></div>
+
+<!-- 🔥 SINGLE KPI -->
+<div id="kpiSingle" style="display:none">
+
+  <div style="
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  ">
+
+    <!-- 🔥 วางตรงนี้ -->
+    <div class="admin-only card" style="margin-bottom:30px;">
+
+      <h3>📥 อัปโหลดข้อมูล HDC (CUP)</h3>
+
+      <input type="file" id="kpiCsv" accept=".csv" class="input-modern"><br><br>
+
+      <button class="btn-modern" onclick="uploadKPI('A1C')">อัปโหลด A1C</button>
+      <button class="btn-modern" onclick="uploadKPI('LDL')">อัปโหลด LDL</button>
+      <button class="btn-modern" onclick="uploadKPI('CRE')">อัปโหลด CRE</button>
+
+      <p style="font-size:12px;color:#888;margin-top:10px;">
+        * กรุณาเลือกไฟล์ให้ตรงกับตัวชี้วัด
+      </p>
+
+    </div>
+
+    <!-- 🔥 ของเดิม -->
+    <canvas id="myChart"></canvas>
+  
+
+  </div> <!-- ปิดกล่องขาว -->
+</div> <!-- ปิด kpiSingle -->
+  
+</div>
+</div>
+  <!-- FOOTER removed for Wix embed: the Wix page footer/contact block is used instead. -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script>
+  Chart.register(window['chartjs-plugin-annotation']); // เส้น 5%
+  Chart.register(ChartDataLabels); // ตัวเลขบนแท่ง
+</script>
+
+<script>
+
+Chart.register(ChartDataLabels);
+
+// ====== GLOBAL ======
+let chart = null;
+let customData = [];
+let customChart = null;
+let homeChart = null;
+let ctRatioChart = null;
+let ctRatioAllChart = null;
+let passList = [];
+let failList = [];
+let summaryHTML = "";
+let summaryRendered = false;
+let featureData = [];
+let saved = localStorage.getItem("featureData");
+if(saved){
+  featureData = JSON.parse(saved);
+}
+let currentStep = 1;
+let stepData = {}; // เก็บไฟล์แต่ละ step
+  const BASE_URL = "https://script.google.com/macros/s/AKfycbwNaB_hnO0XAtXl3zwqlJ1TKYAZB3U97riqC8HTAwklhF7SAv8tv9MtkyPPUPDDHMy1/exec"; // Phrapokklao HDC backend (deployed 2026-07-05)
+
+  function calculateSummary(data){
+
+  let sumA = 0;
+  let sumB = 0;
+
+  data.forEach(d => {
+    sumA += Number(d.a) || 0;
+    sumB += Number(d.b) || 0;
+  });
+
+  let percent = 0;
+
+  if(sumB > 0){
+    percent = (sumA / sumB) * 100;
+  }
+
+  return percent;
+
+}
+  
+function loadFeature(){
+
+  fetch(BASE_URL + "?action=getFeatureData")
+    .then(res => res.json())
+    .then(function(data){
+
+      featureData = data;
+
+      renderFeature();      
+      renderFeatureForm();  
+
+    })
+    .catch(err => {
+      console.error("loadFeature error:", err);
+    });
+
+}
+
+function cleanMonth(m){
+  return (m || "")
+    .trim()
+    .replace(/\./g,"");
+}
+
+const HOSP_ORDER = [
+  "10664"   // โรงพยาบาลพระปกเกล้า (รพศ. จันทบุรี, hospcode 10664. Data auto-aggregated to CUP/อำเภอเมือง level to match HDC.
+];
+
+const HOSP_MAP = {
+  "10664": "โรงพยาบาลพระปกเกล้า"
+};
+
+// ====== KPI LIST ======
+const KPI_LIST = [
+
+  {
+    table:"s_rlu_lab_hba1c_repeat_90day",
+    title:"ร้อยละของผู้ป่วยโรคเบาหวาน ได้รับการตรวจ HbA1c ซ้ำภายใน 90 วัน",
+    target:5
+  },
+
+  {
+    table:"s_rlu_lab_ldl_repeat_90day",
+    title:"ร้อยละของผู้ป่วยโรคเบาหวาน ได้รับการตรวจ LDL-Cholesterol ซ้ำภายใน 90 วัน",
+    target:5
+  },
+
+  {
+    table:"s_rlu_lab_cholesterol_repeat_90day",
+    title:"ร้อยละของผู้มารับบริการได้รับการตรวจ Total Cholesterol ซ้ำภายใน 90 วัน",
+    target:5
+  },
+
+  {
+    table:"s_rlu_lab_triglycerides_repeat_90day",
+    title:"ร้อยละของผู้มารับบริการได้รับการตรวจ Triglycerides ซ้ำภายใน 90 วัน",
+    target:5
+  },
+
+  {
+    table:"s_rlu_lab_hba1c_1year",
+    title:"ร้อยละผู้ป่วยโรคเบาหวาน ได้รับการตรวจ HbA1c อย่างน้อยปีละ 1 ครั้ง",
+    target:70
+  },
+
+  {
+    table:"s_rlu_lab_ldl_1year",
+    title:"ร้อยละของผู้ป่วยโรคเบาหวานได้รับการตรวจ LDL-Cholesterol อย่างน้อยปีละ 1 ครั้ง",
+    target:70
+  },
+
+  {
+    table:"s_rlu_lab_creatinine_1year",
+    title:"ร้อยละของผู้ป่วยโรคเบาหวาน ได้รับการตรวจ Creatinine อย่างน้อยปีละ 1 ครั้ง",
+    target:70
+  }
+
+];
+
+const PASS_COLOR = "#4A6FA5";   // 🔵 น้ำเงิน muted (ดูโปรมาก)
+const FAIL_COLOR = "#D97B7B";   // 🔴 แดง soft
+const BAR_BG = "#E0E0E0";       // ⚪ เทาอ่อน (option)
+
+// ====== PAGE ======
+function showPage(page){
+
+renderFeature();
+
+  ["home","documents","guideline","kpi","manual"].forEach(p=>{
+    let el = document.getElementById(p);
+    if(el) el.style.display="none";
+  });
+
+  let current = document.getElementById(page);
+  if(current) current.style.display="block";
+
+  sessionStorage.setItem("page", page);
+
+  if(page === "documents"){
+    loadDriveFiles("1VEMaIyM6mzX08ZiBKefOK0hScKk9Bbnj", "docBox");
+    loadDriveFiles("1dyqP8pEgx7mIASfWETBGX49yq6nnpxJ-", "meetBox");
+  }
+
+  let custom = document.getElementById("customSection");
+  if(custom) custom.style.display = "none";
+
+  let kpiAll = document.getElementById("kpiAll");
+  if(kpiAll) kpiAll.style.display = "none";
+
+  let kpiSingle = document.getElementById("kpiSingle");
+  if(kpiSingle) kpiSingle.style.display = "none";
+
+let ctRatioSection = document.getElementById("ctRatioSection");
+if(ctRatioSection) ctRatioSection.style.display = "none";
+
+
+if(page=="kpi"){
+  setTimeout(()=>{
+    // ❌ ลบ onKPIChange ออก
+    // onKPIChange();
+
+    // ✅ เรียกตรงๆเลย
+    document.getElementById("kpiAll").style.display = "block";
+    loadAllKPI();
+  },200);
+}
+
+  // if(page=="kpi"){
+  //   let select = document.getElementById("kpiSelect");
+  //   setTimeout(()=>{
+  //     if(typeof loadAllKPI === "function"){
+  //       loadAllKPI();
+  //     }
+  //   },200);
+  // }
+
+  if(!document.getElementById(page)){
+    document.getElementById("home").style.display = "block";
+  }
+
+  if(page=="home"){
+    loadHomeSummary();
+  }
+
+  if(page=="home"){
+    loadHomeSummary();
+    loadFeature();
+  }
+
+  console.log("HOME LOAD KPI");
+}
+//ที่ใส่รูปกิจกรรม
+function convertDriveLink(url){
+
+  if(!url) return "";
+
+  // 🔥 ดึง id จากหลายรูปแบบ
+  let match = url.match(/[-\w]{25,}/);
+
+  if(match){
+    return "https://lh3.googleusercontent.com/d/" + match[0];
+  }
+
+  return url;
+}
+
+function renderFeature(){
+
+  let grid = document.getElementById("featureGrid");
+  grid.innerHTML = "";
+
+  featureData.forEach((item,i)=>{
+
+    grid.innerHTML += `
+      <div class="feature-card">
+
+        <img src="${convertDriveLink(item.img)}">
+
+        <div class="feature-title">${item.title}</div>
+
+        <div class="feature-desc">${item.desc}</div>
+
+      </div>
+    `;
+  });
+}
+
+function renderFeatureForm(){
+
+  let box = document.getElementById("featureForm");
+  if(!box) return;
+
+  box.innerHTML = `
+    <div style="
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:20px;
+    ">
+      ${featureData.map((item,i)=>`
+        <div style="
+          background:#fff;
+          padding:15px;
+          border-radius:12px;
+          box-shadow:0 2px 8px rgba(0,0,0,0.05);
+        ">
+          <input class="input-modern" value="${item.img}" id="img${i}" placeholder="URL รูป"><br><br>
+
+          <input class="input-modern" value="${item.title}" id="title${i}" placeholder="หัวข้อ"><br><br>
+
+          <input class="input-modern" value="${item.desc}" id="desc${i}" placeholder="รายละเอียด">
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function saveFeature(){
+
+  let newData = featureData.map((item,i)=>({
+    id: item.id,
+    img: document.getElementById("img"+i).value,
+    title: document.getElementById("title"+i).value,
+    desc: document.getElementById("desc"+i).value
+  }));
+
+  fetch(BASE_URL + "?action=saveFeatureData&data=" + encodeURIComponent(JSON.stringify(newData)))
+  .then(res => res.json())
+  .then(()=>{
+    showMessage("บันทึกแล้ว");
+    loadFeature();
+  })
+  .catch(()=>{
+    showMessage("บันทึกไม่สำเร็จ");
+  });
+
+}
+// ====== LOAD KPI ======
+function loadKPI(index){
+
+  let kpi = KPI_LIST[index];
+
+  let typeMap = {
+    "s_rlu_lab_hba1c_1year": "A1C",
+    "s_rlu_lab_ldl_1year": "LDL",
+    "s_rlu_lab_creatinine_1year": "CRE"
+  };
+
+  let type = typeMap[kpi.table];
+
+  if(type){
+
+    fetch(BASE_URL + "?action=getKPIData&type=" + type)
+      .then(res => res.json())
+      .then(function(data){
+        renderChart(data, kpi.title, kpi.target);
+      })
+      .catch(err => {
+        console.error("loadKPI error:", err);
+      });
+
+  }else{
+
+    fetch(BASE_URL + "?action=getMOPHKPI&table=" + kpi.table)
+      .then(res => res.json())
+      .then(function(data){
+        renderChart(data, kpi.title, kpi.target);
+      })
+      .catch(err => {
+        console.error("loadKPI error:", err);
+      });
+
+  }
+}
+
+function uploadKPI(type){
+
+  document.getElementById("kpiAll").style.display = "none";
+  let file = document.getElementById("kpiCsv").files[0];
+
+  if(!file){
+    alert("กรุณาเลือกไฟล์");
+    return;
+  }
+
+  let reader = new FileReader();
+
+  reader.onload = function(e){
+
+    let text = e.target.result;
+
+    fetch(BASE_URL + "?action=saveKPIFromCSV"
+      + "&type=" + type
+      + "&text=" + encodeURIComponent(text))
+    .then(res => res.json())
+    .then(()=>{
+
+      showMessage("อัปเดต " + type + " สำเร็จ");
+
+      let val = document.getElementById("kpiSelect").value;
+
+      if(val == "ct_ratio"){
+        loadCtRatioData();
+      }else if(val !== "all" && val !== "custom"){
+        loadKPI(parseInt(val));
+      }
+
+    })
+    .catch(()=>{
+      showMessage("อัปเดตไม่สำเร็จ");
+    });
+
+  };
+
+  loadHomeSummary();
+  reader.readAsText(file);
+}
+
+// ====== RENDER ======
+// Aggregate province rows to the level HDC shows for Phra Pokklao's CUP:
+//  - "ซ้ำ 90 วัน" tables have a consolidated record under hospcode 10664 -> use it
+//  - "ปีละครั้ง" tables have no 10664 record -> sum อำเภอเมือง (areacode 2201*)
+function toCupRow(data){
+  if(!Array.isArray(data)) return data;
+  var has = data.some(function(r){ return String(r.hospcode) === "10664"; });
+  var a = 0, b = 0;
+  data.forEach(function(r){
+    var m = has ? (String(r.hospcode) === "10664") : (String(r.areacode).indexOf("2201") === 0);
+    if(m){ a += parseFloat(r.a) || 0; b += parseFloat(r.b) || 0; }
+  });
+  return [{ hospcode: "10664", a: a, b: b }];
+}
+
+function renderChart(data, title, target){
+
+  data = toCupRow(data);   // -> single CUP row matching HDC
+
+  let labels = [];
+  let values = [];
+  let colors = [];
+
+  let sumA = 0;
+  let sumB = 0;
+
+  let dataMap = {};
+
+  data.forEach(d=>{
+    dataMap[d.hospcode] = d;
+  });
+
+  // ===== รวม =====
+  HOSP_ORDER.forEach(code=>{
+    let d = dataMap[code];
+    if(d){
+      sumA += parseFloat(d.a) || 0;
+      sumB += parseFloat(d.b) || 0;
+    }
+  });
+
+  let total = sumB > 0 ? (sumA/sumB*100) : 0;
+
+  labels.push("รวม");
+  values.push(total.toFixed(2));
+  colors.push("#444"); // 🔥 แท่งรวม = เทาเข้ม
+
+  // ===== ราย รพ. =====
+  HOSP_ORDER.forEach(code=>{
+
+    let d = dataMap[code];
+
+    let sumA = 0;
+let sumB = 0;
+
+data.forEach(d=>{
+  if(d.hospcode == code){
+    sumA += parseFloat(d.a) || 0;
+    sumB += parseFloat(d.b) || 0;
+  }
+});
+
+let percent = sumB > 0 ? (sumA / sumB * 100) : 0;
+
+    labels.push(HOSP_MAP[code]);
+    values.push(percent.toFixed(2));
+
+let isPass;
+
+if(target == 5){
+  isPass = percent < target;
+}else{
+  isPass = percent >= target;
+}
+
+colors.push(isPass ? PASS_COLOR : FAIL_COLOR);
+
+  });
+
+  // ===== destroy =====
+  if(chart){
+    chart.destroy();
+  }
+
+  // ===== draw =====
+  chart = new Chart(document.getElementById("myChart"),{
+
+    type:"bar",
+
+    data:{
+      labels:labels,
+      datasets:[{
+        data:values,
+        backgroundColor:colors
+      }]
+    },
+
+    options:{
+  responsive:true,
+  maintainAspectRatio:false, // 🔥 สำคัญ
+
+      scales:{
+        y:{
+          beginAtZero:true,
+          ticks:{
+            callback:(v)=> v+"%"
+          }
+        }
+      },
+
+      plugins:{
+        legend:{display:false},
+
+        title:{
+  display:false
+},
+
+        datalabels:{
+          anchor:'end',
+          align:'top',
+          formatter:(v)=> v+"%",
+          font:{weight:'bold'}
+        },
+
+        annotation:{
+  annotations:{
+    line1:{
+      type:"line",
+      yMin:target,
+      yMax:target,
+      borderColor:"#999",
+      borderWidth:2,
+      borderDash:[6,6]
+    }
+  }
+}
+
+      }
+
+    }
+
+  });
+
+}
+
+// ====== POPUP ======
+function showMessage(text){
+  let box = document.getElementById("msgBox");
+  box.innerText = text;
+  box.style.display="block";
+  setTimeout(()=>{ box.style.display="none"; },2000);
+}
+
+//สลับโหมด
+function showKPIView(mode){
+
+  if(mode=="all"){
+    document.getElementById("kpiAll").style.display="block";
+    document.getElementById("kpiSingle").style.display="none";
+    loadAllKPI();
+  }
+
+  if(mode=="single"){
+    document.getElementById("kpiAll").style.display="none";
+    document.getElementById("kpiSingle").style.display="block";
+  }
+
+}
+
+//โชว์กราฟทั้งหมด
+function loadAllKPI(){
+console.log("LOAD ALL KPI CALLED 🔥"); 
+summaryRendered = false;
+
+  summaryHTML = "";
+  passList = [];
+  failList = [];
+
+  let container = document.getElementById("kpiAll");
+container.innerHTML = ""; // 🔥 ล้างก่อนทุกครั้ง
+
+  let count = 0;
+  let total = KPI_LIST.length + 1;
+
+  container.style.display = "flex";
+  container.style.flexWrap = "wrap";
+  container.style.gap = "20px";
+
+  // ===== DOM =====
+  KPI_LIST.forEach((kpi, index)=>{
+
+    let div = document.createElement("div");
+    div.style.background = "white";
+    div.style.padding = "15px";
+    div.style.borderRadius = "12px";
+    div.className = "kpi-card";
+
+    div.innerHTML = `
+      <h3 style="font-size:16px;margin-bottom:10px;">
+        ${kpi.title}
+      </h3>
+      <div style="height:220px;">
+        <canvas id="chart${index}"></canvas>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+
+  // ===== KPI API =====
+  KPI_LIST.forEach((kpi, index)=>{
+
+    let typeMap = {
+      "s_rlu_lab_hba1c_1year": "A1C",
+      "s_rlu_lab_ldl_1year": "LDL",
+      "s_rlu_lab_creatinine_1year": "CRE"
+    };
+
+    let type = typeMap[kpi.table];
+
+    let url;
+
+    if(type){
+      url = BASE_URL + "?action=getKPIData&type=" + type;
+    }else{
+      url = BASE_URL + "?action=getMOPHKPI&table=" + kpi.table;
+    }
+
+    fetch(url)
+      .then(res => res.json())
+      .then(function(data){
+
+        renderChartMulti(data, kpi.title, kpi.target, index);
+        renderSummary(data, kpi.title, kpi.target);
+
+        count++;
+
+        if(count === total){
+          renderSummaryDashboard();
+        }
+
+      })
+      .catch(err => console.error("KPI error:", err));
+
+  });
+
+  // ===== CUSTOM SUMMARY =====
+  fetch(BASE_URL + "?action=getCustomKPI")
+  .then(res => res.json())
+  .then(function(data){
+
+    renderCustomSummaryFromSheet(data);
+
+    count++;
+
+    if(count === total){
+      renderSummaryDashboard();
+    }
+
+  });
+
+  // ===== CT RATIO =====
+  let ctDiv = document.createElement("div");
+  ctDiv.style.background = "white";
+  ctDiv.style.padding = "15px";
+  ctDiv.style.borderRadius = "12px";
+  ctDiv.className = "kpi-card";
+
+  ctDiv.innerHTML = `
+    <h3 style="font-size:16px;margin-bottom:10px;">
+      Top Ward C:T Ratio สูงสุด
+    </h3>
+    <div id="ctRatioAllMeta" style="font-size:12px;color:#666;margin-bottom:8px;"></div>
+    <div style="height:220px;">
+      <canvas id="ctRatioAllChart"></canvas>
+    </div>
+  `;
+
+  container.appendChild(ctDiv);
+
+  fetch(BASE_URL + "?action=getCtRatio")
+    .then(res => res.json())
+    .then(renderCtRatioAllChart)
+    .catch(err => console.error(err));
+
+  // ===== CUSTOM GRAPH =====
+  let div = document.createElement("div");
+  div.style.background = "white";
+  div.style.padding = "15px";
+  div.style.borderRadius = "12px";
+  div.className = "kpi-card";
+
+  div.innerHTML = `
+    <h3 style="font-size:16px;margin-bottom:10px;">
+      อัตราการรายงานผลตรวจได้ทันตามกำหนด
+    </h3>
+    <div style="height:220px;">
+      <canvas id="customAllChart"></canvas>
+    </div>
+  `;
+
+  container.appendChild(div);
+
+  fetch(BASE_URL + "?action=getCustomKPI")
+  .then(res => res.json())
+  .then(function(data){
+
+    const monthOrder = {
+      "มค":1,"กพ":2,"มีค":3,"เมย":4,
+      "พค":5,"มิย":6,"กค":7,"สค":8,
+      "กย":9,"ตค":10,"พย":11,"ธค":12
+    };
+
+    data = data.map(d=>({
+      monthRaw: (d.month || "").trim(),
+      month: cleanMonth(d.month),
+      year: Number(d.year),
+      value: Number(d.value)
+    }));
+
+    data.sort((a,b)=>{
+      return (a.year - b.year) || (monthOrder[a.month] - monthOrder[b.month]);
+    });
+
+    let labels = [];
+    let values = [];
+
+    data.forEach(d=>{
+      labels.push(d.monthRaw + " " + d.year);
+      values.push(d.value);
+    });
+
+    new Chart(document.getElementById("customAllChart"),{
+      type:"line",
+      data:{
+        labels:labels,
+        datasets:[{
+          data:values,
+          borderWidth:2,
+          fill:false
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{
+          legend:{display:false}
+        },
+        scales:{
+          y:{
+            min:95,
+            max:100,
+            ticks:{callback:(v)=> v+"%"}
+          }
+        }
+      }
+    });
+
+    setTimeout(()=>{
+      if(sessionStorage.getItem("page") === "home"){
+        renderSummaryDashboard();
+      }
+    },800);
+    
+  });
+  
+loadCostKPI();
+  
+}
+
+
+function renderCtRatioAllChart(payload){
+  let canvas = document.getElementById("ctRatioAllChart");
+  if(!canvas) return;
+
+  if(ctRatioAllChart){
+    ctRatioAllChart.destroy();
+  }
+
+  let meta = document.getElementById("ctRatioAllMeta");
+  if(meta){
+    meta.innerHTML = payload.range_text || "ยังไม่มีข้อมูลจาก S2G";
+  }
+
+  ctRatioAllChart = new Chart(canvas,{
+    type:"bar",
+    data:{
+      labels: payload.labels || [],
+      datasets:[{
+        data: payload.ratioValues || [],
+        backgroundColor:"rgba(245, 158, 11, 0.78)",
+        borderColor:"rgba(217, 119, 6, 0.95)",
+        borderWidth:1,
+        borderRadius:10,
+        maxBarThickness:28
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        datalabels:{
+          anchor:"end",
+          align:"top",
+          formatter:(v)=> Number(v || 0).toFixed(2) + ":1"
+        },
+        tooltip:{
+          callbacks:{
+            label:(ctx)=> `C:T Ratio: ${Number(ctx.parsed.y || 0).toFixed(2)}:1`
+          }
+        }
+      },
+      scales:{
+        y:{
+          beginAtZero:true,
+          ticks:{
+            callback:(v)=> Number(v).toFixed(1) + ":1"
+          }
+        }
+      }
+    }
+  });
+}
+
+
+function renderChartMulti(data, title, target, index){
+
+  data = toCupRow(data);   // -> single CUP row matching HDC
+
+  let ctx = document.getElementById("chart"+index);
+if(!ctx) return; // 🔥 กันพัง
+
+  let labels = [];
+  let values = [];
+  let colors = [];
+
+  let sumA = 0;
+  let sumB = 0;
+
+  let dataMap = {};
+  data.forEach(d=>{
+    dataMap[d.hospcode] = d;
+  });
+
+  HOSP_ORDER.forEach(code=>{
+    let d = dataMap[code];
+    if(d){
+      sumA += parseFloat(d.a) || 0;
+      sumB += parseFloat(d.b) || 0;
+    }
+  });
+
+  let total = sumB > 0 ? (sumA/sumB*100) : 0;
+
+  labels.push("รวม");
+  values.push(total.toFixed(2));
+  colors.push("#444");
+
+  HOSP_ORDER.forEach(code=>{
+
+    let sumA = 0;
+    let sumB = 0;
+
+    data.forEach(d=>{
+      if(d.hospcode == code){
+        sumA += parseFloat(d.a) || 0;
+        sumB += parseFloat(d.b) || 0;
+      }
+    });
+
+    let percent = sumB > 0 ? (sumA/sumB*100) : 0;
+
+    labels.push(HOSP_MAP[code]);
+    values.push(percent.toFixed(2));
+
+    let isPass = (target == 5) ? percent < target : percent >= target;
+
+    colors.push(isPass ? PASS_COLOR : FAIL_COLOR);
+
+  });
+
+  new Chart(ctx,{
+    type:"bar",
+    data:{
+      labels:labels,
+      datasets:[{
+        data:values,
+        backgroundColor:colors
+      }]
+    },
+options:{
+  responsive:true,
+  maintainAspectRatio:false,
+
+  plugins:{
+    legend:{display:false},
+
+    datalabels:{
+      anchor:'end',
+      align:'top',
+      formatter:(v)=> v+"%"
+    },
+
+    annotation:{ // ✅ ใส่กลับ
+      annotations:{
+        line1:{
+          type:"line",
+          yMin:target,
+          yMax:target,
+          borderColor:"#999",
+          borderWidth:2,
+          borderDash:[6,6]
+        }
+      }
+    }
+
+  },
+
+  scales:{
+    y:{
+      beginAtZero:true,
+      ticks:{callback:(v)=> v+"%"}
+    }
+  }
+}
+  });
+
+}
+
+function onKPIChange(){
+
+let uploadBox = document.querySelector("#kpiSingle .admin-only");
+if(uploadBox) uploadBox.style.display = "none";
+let val = document.getElementById("kpiSelect").value;
+
+// 🔥 ลบทุกกราฟที่มี
+if(chart){
+  chart.destroy();
+  chart = null;
+}
+
+if(customChart){
+  customChart.destroy();
+  customChart = null;
+}
+
+if(ctRatioChart){
+  ctRatioChart.destroy();
+  ctRatioChart = null;
+}
+
+// 🔥 เคลียร์ canvas
+let canvas1 = document.getElementById("myChart");
+if(canvas1){
+  let ctx1 = canvas1.getContext("2d");
+  ctx1.clearRect(0,0,canvas1.width,canvas1.height);
+}
+
+let canvas2 = document.getElementById("customChart");
+if(canvas2){
+  let ctx2 = canvas2.getContext("2d");
+  ctx2.clearRect(0,0,canvas2.width,canvas2.height);
+}
+
+// 🔥 ซ่อนทั้งหมดก่อน
+document.getElementById("kpiAll").style.display="none";
+document.getElementById("kpiSingle").style.display="none";
+document.getElementById("customSection").style.display="none";
+document.getElementById("ctRatioSection").style.display = "none";
+
+
+if(val=="all"){
+  document.getElementById("kpiAll").style.display="block";
+  loadAllKPI();
+}
+
+else if(val=="custom"){
+
+  document.getElementById("kpiAll").style.display="none";
+  document.getElementById("kpiSingle").style.display="none";
+
+  document.getElementById("customSection").style.display="block";
+
+  loadCustomData();
+
+  // 🔥 บังคับ resize หลัง render
+
+  setTimeout(()=>{
+
+    if(customChart){
+
+      customChart.resize();
+
+    }
+
+  },300);
+}
+
+else if(val == "ct_ratio"){
+  document.getElementById("ctRatioSection").style.display = "block";
+  loadCtRatioData();
+}
+
+else{
+  document.getElementById("kpiSingle").style.display="block";
+  loadKPI(parseInt(val));
+}
+
+// 👇 KPI ปีละครั้ง index = 4,5,6
+if(val == "4" || val == "5" || val == "6"){
+  let uploadBox = document.querySelector("#kpiSingle .admin-only");
+  if(uploadBox) uploadBox.style.display = "block";
+}
+
+}
+
+//กรอกข้อมูลตัวชี้วัดพี่กิ๊ก//
+function addData(){
+
+let year = document.getElementById("yearInput").value;
+let month = document.getElementById("monthInput").value;
+let value = parseFloat(document.getElementById("valueInput").value);
+
+if(!year || !month || isNaN(value)){
+  showMessage("กรอกข้อมูลให้ครบ");
+  return;
+}
+
+let data = {
+  kpi_name: "อัตราการรายงานผลตรวจได้ทันตามกำหนด",
+  year: year,
+  month: month,
+  hospcode: HOSP_ORDER[0],
+  value: value,
+  target: 99,
+  direction: "MORE"
+};
+
+fetch(BASE_URL + "?action=saveCustomKPI&data=" + encodeURIComponent(JSON.stringify(data)))
+.then(res => res.json())
+.then(()=>{
+  showMessage("บันทึกสำเร็จ");
+  loadCustomData();
+})
+.catch(()=>{
+  showMessage("บันทึกไม่สำเร็จ");
+  loadCustomData();
+});
+
+}
+
+//กราฟพี่กิ๊ก//
+function renderCustomChart(){
+
+let canvas = document.getElementById("customChart");
+if(!canvas){
+  alert("ไม่เจอ canvas ❌");
+  return;
+}
+
+// 🔥 กันข้อมูลว่าง
+if(!customData || customData.length === 0){
+  alert("ไม่มีข้อมูล ❌");
+  return;
+}
+
+// 🔥 sort ตามเดือน (กันมั่ว)
+customData.sort((a,b)=>{
+
+  let [m1,y1] = a.label.split(" ");
+  let [m2,y2] = b.label.split(" ");
+
+  const monthOrder = {
+    "มค":1,"กพ":2,"มีค":3,"เมย":4,
+    "พค":5,"มิย":6,"กค":7,"สค":8,
+    "กย":9,"ตค":10,"พย":11,"ธค":12
+  };
+
+  m1 = cleanMonth(m1);
+  m2 = cleanMonth(m2);
+
+  return (y1 - y2) || (monthOrder[m1] - monthOrder[m2]);
+});
+
+let labels = customData.map(d=>d.label);
+let values = customData.map(d=>d.value);
+
+// 🔥 debug
+console.log("labels:", labels);
+console.log("values:", values);
+
+// destroy เก่า
+if(customChart){
+  customChart.destroy();
+}
+
+// สร้างใหม่
+customChart = new Chart(canvas,{
+  type:"line",
+  data:{
+    labels:labels,
+    datasets:[{
+      label:"% อัตราการรายงานผลได้ทันกำหนด",
+      data:values,
+      borderWidth:2,
+      fill:false
+    }]
+  },
+options:{
+  responsive:true,
+  plugins:{
+    legend:{
+      display:false // ✅ ปิดชื่อกราฟ
+    },
+    title:{
+      display:false // ✅ กันเผื่อมี
+    },
+    annotation:{
+      annotations:{
+        line1:{
+          type:"line",
+          yMin:99,
+          yMax:99,
+          borderColor:"green",
+          borderDash:[6,6]
+        }
+      }
+    }
+  },
+  scales:{
+    y:{
+      min:95,
+      max:100,
+      ticks:{
+        callback:(v)=> v+"%"
+      }
+    }
+  }
+}
+});
+
+}
+
+//โหลดจากชีทมาแสดง
+function loadCustomData(){
+
+fetch(BASE_URL + "?action=getCustomKPI")
+.then(res => res.json())
+.then(function(data){
+
+customData = [];
+
+// 🔥 ตัว clean กลาง (สำคัญมาก)
+function cleanMonth(m){
+  return (m || "")
+    .trim()
+    .replace(/\./g,""); // ลบจุดทั้งหมด
+}
+
+// 🔥 key ต้องไม่มีจุด
+const monthOrder = {
+  "มค":1,"กพ":2,"มีค":3,"เมย":4,
+  "พค":5,"มิย":6,"กค":7,"สค":8,
+  "กย":9,"ตค":10,"พย":11,"ธค":12
+};
+
+data.forEach(d=>{
+
+  let rawMonth = (d.month || "").trim();   // ใช้แสดงผล
+  let clean = cleanMonth(d.month);         // ใช้ sort
+  let y = Number(d.year);
+
+  customData.push({
+    monthRaw: rawMonth,
+    monthKey: clean,
+    year: y,
+    value: Number(d.value),
+    order: monthOrder[clean] || 0
+  });
+
+});
+
+// 🔥 sort จริง
+customData.sort((a,b)=>{
+  return (a.year - b.year) || (a.order - b.order);
+});
+
+// 👉 map เป็น label (ใช้ raw)
+customData = customData.map(d=>({
+  label: d.monthRaw + " " + d.year,
+  value: d.value
+}));
+
+// 🔥 render
+setTimeout(()=>{
+  renderCustomChart();
+},200);
+
+})
+.catch(err=>{
+  console.error(err);
+  showMessage("โหลดข้อมูลไม่สำเร็จ");
+});
+
+}
+
+//kpi summerry//
+function renderSummary(data, title, target){
+
+data = toCupRow(data);   // -> single CUP row matching HDC
+
+let rows = data.filter(d => d.hospcode == HOSP_ORDER[0]);
+
+let sumA = 0;
+let sumB = 0;
+
+rows.forEach(d => {
+  sumA += Number(d.a) || 0;
+  sumB += Number(d.b) || 0;
+});
+
+let percent = sumB > 0 ? (sumA / sumB * 100) : 0;
+
+
+let pass = (target == 5) ? percent < 5 : percent >= target; 
+
+
+
+// 🔥 บังคับให้เป็น true/false เท่านั้น pass = pass === true; 
+
+
+
+let item = { title: title, value: percent.toFixed(2), pass: Boolean(pass) // 🔥 บังคับเป็น true/false 
+
+}; 
+
+
+
+if(pass === true){ 
+
+passList.push(item); }else{ 
+
+failList.push(item); 
+
+} 
+
+
+
+}
+
+function renderSummaryDashboard(){
+
+  if(summaryRendered) return;   // ✅ กันยิงซ้ำ
+  summaryRendered = true;
+
+  if(passList.length + failList.length === 0) return;
+
+  let total = passList.length + failList.length;
+
+  // ===== 🔥 TOP SUMMARY =====
+  let summaryTop = `
+  <div style="
+    display:flex;
+    gap:20px;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+  ">
+
+    <div class="kpi-box">
+      <h1 style="color:#2E7D32;">${passList.length}</h1>
+      <p>ผ่าน</p>
+    </div>
+
+    <div class="kpi-box">
+      <h1 style="color:#C62828;">${failList.length}</h1>
+      <p>ไม่ผ่าน</p>
+    </div>
+
+    <div class="kpi-box">
+      <h1>${total}</h1>
+      <p>ทั้งหมด</p>
+    </div>
+
+  </div>
+  `;
+
+  // ===== 🔥 MAIN HTML =====
+  let html = `
+
+  ${summaryTop}
+
+  <div style="
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+  ">
+
+    <!-- ✅ ผ่าน -->
+    <div style="
+      flex:1;
+      min-width:300px;
+      background:white;
+      padding:20px;
+      border-radius:16px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    ">
+
+      <h3 style="color:#2E7D32;">ผ่าน ${passList.length}</h3>
+
+      ${passList.map(item=>`
+        <div style="
+          padding:10px 0;
+          border-bottom:1px solid #eee;
+          display:flex;
+          justify-content:space-between;
+        ">
+          <span>${item.title}</span>
+          <span style="color:#2E7D32;font-weight:600;">
+            ${item.value}%
+          </span>
+        </div>
+      `).join("")}
+
+    </div>
+
+    <!-- ❌ ไม่ผ่าน -->
+    <div style="
+      flex:1;
+      min-width:300px;
+      background:white;
+      padding:20px;
+      border-radius:16px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    ">
+
+      <h3 style="color:#C62828;">ไม่ผ่าน ${failList.length}</h3>
+
+      ${failList.map(item=>`
+        <div style="
+          padding:10px 0;
+          border-bottom:1px solid #eee;
+          display:flex;
+          justify-content:space-between;
+        ">
+          <span>${item.title}</span>
+          <span style="color:#C62828;font-weight:600;">
+            ${item.value}%
+          </span>
+        </div>
+      `).join("")}
+
+    </div>
+
+  </div>
+  `;
+
+  // ===== 🔥 ยิงลงหน้า =====
+  let page = sessionStorage.getItem("page");
+
+  if(page === "kpi"){
+    let el = document.getElementById("kpiSummary");
+    if(el){
+      el.innerHTML = html;
+    }
+  }
+
+  if(page === "home"){
+    let home = document.getElementById("homeKPI");
+    if(home){
+      home.innerHTML = html;
+    }
+  }
+
+  console.log("SUMMARY DONE", passList, failList);
+}
+
+
+function renderCustomSummaryFromSheet(data){
+
+if(data.length == 0) return;
+
+let last = data[data.length - 1];
+
+let pass = last.value >= last.target;
+
+// 🔥 บังคับ boolean
+pass = pass === true;
+
+let item = {
+  title: "อัตราการรายงานผลตรวจได้ทันตามกำหนด",
+  value: last.value,
+  pass: Boolean(pass)
+};
+
+if(pass){
+  passList.push(item);
+}else{
+  failList.push(item);
+}
+
+}
+//dashborad home
+function loadHomeSummary(){
+
+  summaryRendered = false;
+  passList = [];
+  failList = [];
+
+  let count = 0;
+  let total = KPI_LIST.length + 1;
+
+  function checkDone(){
+    if(count === total && !summaryRendered){
+      summaryRendered = true;
+      renderHomeDonut();
+    }
+  }
+
+  KPI_LIST.forEach((kpi)=>{
+
+    let typeMap = {
+      "s_rlu_lab_hba1c_1year": "A1C",
+      "s_rlu_lab_ldl_1year": "LDL",
+      "s_rlu_lab_creatinine_1year": "CRE"
+    };
+
+    let type = typeMap[kpi.table];
+
+    // ===== 🔥 CASE 1: CSV KPI =====
+    if(type){
+
+      fetch(BASE_URL + `?action=getKPIData&type=${type}`)
+      .then(res => res.json())
+      .then(function(data){
+
+        renderSummary(data, kpi.title, kpi.target);
+
+        count++;
+        checkDone();
+
+      })
+      .catch(err=>{
+        console.error(err);
+        count++;
+        checkDone();
+      });
+
+    }
+
+    // ===== 🔥 CASE 2: HDC KPI =====
+    else{
+
+      fetch(BASE_URL + `?action=getMOPHKPI&table=${kpi.table}`)
+      .then(res => res.json())
+      .then(function(data){
+
+        renderSummary(data, kpi.title, kpi.target);
+
+        count++;
+        checkDone();
+
+      })
+      .catch(err=>{
+        console.error(err);
+        count++;
+        checkDone();
+      });
+
+    }
+
+  });
+
+  // ===== 🔥 CUSTOM KPI =====
+  fetch(BASE_URL + "?action=getCustomKPI")
+  .then(res => res.json())
+  .then(function(data){
+
+    renderCustomSummaryFromSheet(data);
+
+    count++;
+    checkDone();
+
+  })
+  .catch(err=>{
+    console.error(err);
+    count++;
+    checkDone();
+  });
+
+}
+
+function renderHomeDonut(){
+
+  let ctx = document.getElementById("homeDonut");
+  if(!ctx) return;
+
+  if(homeChart){
+    homeChart.destroy();
+  }
+
+  let labels = [];
+  let values = [];
+  let colors = [];
+
+  let all = [
+    ...KPI_LIST.map((kpi, i)=>{
+
+      let found = [...passList, ...failList]
+        .find(x => x.title === kpi.title);
+
+      return {
+        title: kpi.title,
+        index: i,
+        pass: found ? found.pass : false
+      };
+
+    }),
+
+    {
+      title: "อัตราการรายงานผลตรวจได้ทันตามกำหนด",
+      index: "custom",
+      pass: [...passList, ...failList]
+        .find(x => x.title.includes("รายงานผล"))?.pass || false
+    }
+  ];
+
+  let passArr = all.filter(x => x.pass);
+  let failArr = all.filter(x => !x.pass);
+  let sorted = [...passArr, ...failArr];
+
+  sorted.forEach(item=>{
+    labels.push(item.title);
+    values.push(1);
+    colors.push(item.pass ? PASS_COLOR : FAIL_COLOR);
+  });
+
+  // ✅ สร้างกราฟ
+  homeChart = new Chart(ctx,{
+    type: "doughnut",
+    data:{
+      labels:labels,
+      datasets:[{
+        data:values,
+        backgroundColor:colors,
+        borderWidth:2
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{ display:false },
+        datalabels:{ display:false }
+      }
+    }
+  });
+
+  // ✅ สรุป (ต้องอยู่นอก Chart เท่านั้น)
+  let pass = sorted.filter(x => x.pass).length;
+  let total = sorted.length;
+  let fail = total - pass;
+
+  let summary = document.getElementById("donutSummary");
+  if(summary){
+    summary.innerHTML = `
+      <div style="
+        margin-top:15px;
+        padding:14px 18px;
+        border-radius:14px;
+        background:linear-gradient(135deg,#f8f9fa,#eef1f4);
+        font-size:18px;
+        font-weight:600;
+        display:inline-block;
+      ">
+        ผ่าน <span style="color:#4A6FA5;font-size:22px;">${pass}</span>
+        &nbsp;|&nbsp;
+        ไม่ผ่าน <span style="color:#D97B7B;font-size:22px;">${fail}</span>
+        &nbsp;|&nbsp;
+        ทั้งหมด <span style="font-size:22px;">${total}</span>
+      </div>
+    `;
+  }
+
+}
+
+//บันไดสี่ขั้น
+function openStep(step){
+
+  currentStep = step;
+
+  fetch(BASE_URL + `?action=getStepFiles&step=${step}`)
+  .then(res => res.json())
+  .then(function(files){
+
+    let box = document.getElementById("stepFiles");
+    box.innerHTML = "";
+
+    if(files.length === 0){
+      box.innerHTML = "<div style='color:#888;'>ยังไม่มีไฟล์</div>";
+    }else{
+      files.forEach(f=>{
+        box.innerHTML += `
+          <div style="
+            background:#f7f7f7;
+            padding:10px;
+            border-radius:10px;
+            margin-bottom:10px;
+          ">
+            <a href="${f.url}" target="_blank">📄 ${f.name}</a>
+          </div>
+        `;
+      });
+    }
+
+    renderUploadInputs(files);
+
+    document.getElementById("stepModal").style.display="flex";
+
+  })
+  .catch(err=>{
+    console.error(err);
+    showMessage("โหลดไฟล์ไม่สำเร็จ");
+  });
+
+}
+
+
+function addStepInput(){
+  let box = document.getElementById("stepUploadBox");
+
+  box.innerHTML += `
+    <div>
+      <input class="input-modern step-name" placeholder="ชื่อไฟล์">
+      <input class="input-modern step-url" placeholder="ลิงก์ Google Drive">
+    </div>
+  `;
+}
+
+function saveStepFiles(){
+
+  let names = document.querySelectorAll(".step-name");
+  let urls = document.querySelectorAll(".step-url");
+
+  let arr = [];
+
+  for(let i=0;i<names.length;i++){
+    if(names[i].value && urls[i].value){
+      arr.push({
+        name:names[i].value,
+        url:urls[i].value
+      });
+    }
+  }
+
+  fetch(BASE_URL + "?action=saveStepFilesToSheet"
+    + "&step=" + currentStep
+    + "&data=" + encodeURIComponent(JSON.stringify(arr)))
+  .then(res => res.json())
+  .then(()=>{
+    openStep(currentStep);
+  })
+  .catch(()=>{
+    console.log("SAVE ERROR");
+  });
+
+}
+
+function closeModal(){
+  document.getElementById("stepModal").style.display="none";
+}
+
+function renderUploadInputs(files){
+
+  let box = document.getElementById("stepUploadBox");
+  box.innerHTML = "";
+
+  if(!files || files.length === 0){
+    addStepInput();
+    return;
+  }
+
+  files.forEach(f=>{
+    box.innerHTML += `
+      <div>
+        <input class="input-modern step-name" value="${f.name}">
+        <input class="input-modern step-url" value="${f.url}">
+      </div>
+    `;
+  });
+}
+
+// ===== UPLOAD =====
+function loadDriveFiles(folderId, boxId){
+
+  let url = BASE_URL + "?action=listFiles&type=" + folderId;
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+
+      let box = document.getElementById(boxId);
+      box.innerHTML = "";
+
+      if(data.length === 0){
+        box.innerHTML = "<div style='color:#888;'>ยังไม่มีไฟล์</div>";
+        return;
+      }
+
+     data.forEach(f => {
+
+  let fileId = f.url.match(/[-\w]{25,}/); // ดึง id จาก url
+
+  let thumb = fileId
+    ? `https://drive.google.com/thumbnail?id=${fileId}`
+    : "https://cdn-icons-png.flaticon.com/512/337/337946.png";
+
+  box.innerHTML += `
+  <div class="file-card" onclick="window.open('${f.url}')">
+
+    <img src="${thumb}">
+
+    <div class="file-name">
+      ${f.name}
+    </div>
+
+  </div>
+`;
+
+});
+
+    })
+    .catch(err => {
+      console.error("โหลดไฟล์ผิด:", err);
+    });
+
+}
+
+//login
+function doLogin(){
+
+  let u = document.getElementById("user").value;
+  let p = document.getElementById("pass").value;
+
+  let url = BASE_URL + ""
+    + "?action=login"
+    + "&username=" + encodeURIComponent(u)
+    + "&password=" + encodeURIComponent(p);
+
+  fetch(url)
+  .then(res => res.json())
+  .then(function(res){
+
+    console.log("LOGIN RES:", res);
+
+    if(res.status == "success"){
+
+      sessionStorage.setItem("role", res.role);
+      sessionStorage.setItem("username", u);
+
+      document.getElementById("loginBox").style.display = "none";
+
+      applyRole();
+      showPage("home");
+
+    }else{
+      alert("login ไม่สำเร็จ");
+    }
+
+  })
+  .catch(err=>{
+    console.error(err);
+    alert("ระบบมีปัญหา");
+  });
+
+}
+
+//คุมสิทธิ์
+function applyRole(){
+
+  let role = sessionStorage.getItem("role") || "guest";
+  let btn = document.querySelector(".login-btn");
+
+  if(!btn) return;
+
+  if(role === "admin"){
+    btn.innerText = "Logout";
+    btn.onclick = logout;
+  }else{
+    btn.innerText = "Login";
+    btn.onclick = openLogin;
+  }
+
+  document.querySelectorAll(".admin-only").forEach(el=>{
+    el.style.display = (role === "admin") ? "block" : "none";
+  });
+
+}
+
+function openLogin(){
+  document.getElementById("loginBox").style.display = "flex";
+}
+
+function closeLogin(){
+  document.getElementById("loginBox").style.display = "none";
+}
+function logout(){
+
+  sessionStorage.clear();
+
+  applyRole();        // 🔥 รีเซ็ตสิทธิ์
+  showPage("home");   // 🔥 กลับ home
+
+}
+document.addEventListener("DOMContentLoaded", function(){
+
+  let popup = document.getElementById("welcomePopup");
+  console.log("POPUP =", popup);
+
+  if(popup){
+    popup.style.display = "flex";
+  }
+
+  // 🔥 อ่าน URL ก่อน
+  let params = new URLSearchParams(window.location.search);
+  let urlPage = params.get("page");
+
+  let role = sessionStorage.getItem("role") || "guest";
+  applyRole();
+
+  // 🔥 ใช้ URL ก่อน ถ้าไม่มีค่อยใช้ session
+  let finalPage = urlPage || sessionStorage.getItem("page") || "home";
+  showPage(finalPage);
+
+  loadFeature();
+
+  let ctRatioSection = document.getElementById("ctRatioSection");
+  if(ctRatioSection) ctRatioSection.style.display = "none";
+
+});
+
+function goToDoc(){
+  showPage('documents');
+}
+
+function saveGuideline(){
+
+  let pdf = document.getElementById("guidePdf").value;
+  let ver = document.getElementById("guideVer").value;
+
+  if(!pdf || !ver){
+    showMessage("กรอกให้ครบ");
+    return;
+  }
+
+  let data = {
+    pdf: pdf,
+    version: ver
+  };
+
+  fetch(BASE_URL + "?action=saveGuideline&data=" + encodeURIComponent(JSON.stringify(data)))
+  .then(res => res.json())
+  .then(()=>{
+    showMessage("บันทึกแล้ว");
+  })
+  .catch(()=>{
+    showMessage("บันทึกไม่สำเร็จ");
+  });
+
+}
+
+function loadCtRatioData(){
+
+  fetch(BASE_URL + "?action=getCtRatio")
+  .then(res => res.json())
+  .then(renderCtRatioChart)
+  .catch(function(err){
+    showMessage("โหลด C:T Ratio ไม่สำเร็จ");
+    console.error(err);
+  });
+
+}
+
+function renderCtRatioChart(payload){
+  let canvas = document.getElementById("ctRatioChart");
+  if(!canvas) return;
+
+  if(ctRatioChart){
+    ctRatioChart.destroy();
+  }
+
+  let meta = document.getElementById("ctRatioMeta");
+  if(meta){
+    meta.innerHTML =
+      `ช่วงข้อมูล: ${payload.range_text || ((payload.start_date || "-") + " ถึง " + (payload.end_date || "-"))}
+       | อัปเดตล่าสุด: ${payload.updatedAt || "-"}
+       | ${payload.note || ""}`;
+  }
+
+  if(!payload.labels || payload.labels.length === 0){
+    if(meta){
+      meta.innerHTML += "<br>ยังไม่มีข้อมูล Top Ward C:T Ratio จาก S2G";
+    }
+    return;
+  }
+
+  ctRatioChart = new Chart(canvas,{
+    type:"bar",
+    data:{
+      labels: payload.labels || [],
+      datasets:[{
+        label:"C:T Ratio",
+        data: payload.ratioValues || [],
+        backgroundColor:"rgba(245, 158, 11, 0.78)",
+        borderColor:"rgba(217, 119, 6, 0.95)",
+        borderWidth:1,
+        borderRadius:10,
+        maxBarThickness:28
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{
+            label:function(ctx){
+              return `C:T Ratio: ${Number(ctx.parsed.y || 0).toFixed(2)}:1`;
+            },
+            afterBody:function(items){
+              let i = items[0].dataIndex;
+              return [
+                `Crossmatch: ${(payload.crossmatchValues || [])[i] || 0} units`,
+                `Transfusion: ${(payload.transfusionValues || [])[i] || 0} units`
+              ];
+            }
+          }
+        },
+        datalabels:{
+          anchor:"end",
+          align:"top",
+          formatter:function(v){
+            return Number(v || 0).toFixed(2) + ":1";
+          }
+        }
+      },
+      scales:{
+        y:{
+          beginAtZero:true,
+          ticks:{
+            callback:function(v){
+              return Number(v).toFixed(1) + ":1";
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function closePopup(){
+  document.getElementById("welcomePopup").style.display = "none";
+  localStorage.setItem("seenPopup", "true");
+}
+
+function renderCostKPI(data){
+
+  let box = document.getElementById("kpiCostBox");
+  if(!box) return;
+
+  // 🔥 เอาค่าเดียว (รวมทั้งปี)
+  let d = Array.isArray(data) ? data[0] : data;
+
+  let year = d.year || "2569";
+  let cost = Number(d.cost || 0).toLocaleString();
+
+  let html = `
+    <div style="
+      background:white;
+      padding:25px;
+      border-radius:18px;
+      box-shadow:0 6px 16px rgba(0,0,0,0.08);
+      margin-bottom:20px;
+    ">
+
+      <h3 style="color:#C9435A;margin-bottom:10px;">
+        มูลค่าความสูญเสียจากการตรวจซ้ำ
+      </h3>
+
+      <div style="
+        font-size:28px;
+        font-weight:bold;
+        color:#C62828;
+        margin-bottom:10px;
+      ">
+        ปี ${year} : ${cost} บาท
+      </div>
+
+      <div style="
+        font-size:13px;
+        color:#666;
+        margin-top:10px;
+      ">
+        * คำนวณจากจำนวนการตรวจซ้ำ × ราคาต่อรายการ<br>
+        (HbA1c, LDL-Cholesterol, Total Cholesterol, Triglyceride)
+      </div>
+
+    </div>
+  `;
+
+  box.innerHTML = html;
+
+}
+  function loadCostKPI(){
+
+  fetch(BASE_URL + "?action=getCostKPI")
+  .then(res => res.json())
+  .then(data => {
+
+    renderCostKPI(data);
+
+    // 🔥 เอาไปใส่ home ด้วย
+    let d = Array.isArray(data) ? data[0] : data;
+    renderHomeCost(d.cost);
+
+  });
+
+}
+
+  function renderHomeCost(cost){
+
+  let box = document.getElementById("homeCostBox");
+  if(!box) return;
+
+  let html = `
+    <div style="
+      background:#fff5f5;
+      padding:25px;
+      border-radius:18px;
+      text-align:center;
+      margin-top:20px;
+      box-shadow:0 6px 16px rgba(0,0,0,0.08);
+    ">
+
+      <div style="font-size:16px;color:#666;">
+        มูลค่าความสูญเสียจากการตรวจซ้ำ (ปีปัจจุบัน)
+      </div>
+
+      <div style="
+        font-size:40px;
+        font-weight:bold;
+        color:#C62828;
+        margin-top:10px;
+      ">
+        ${Number(cost).toLocaleString()}
+      </div>
+
+      <div style="font-size:14px;color:#888;">
+        บาท
+      </div>
+
+    </div>
+  `;
+
+  box.innerHTML = html;
+
+}
+
+</script>
+
+<script>
+/* Wix auto-height: post document height to parent so a Velo listener can resize the embed (see WIX-RLU-SETUP.md). */
+(function(){function h(){return Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);}function post(){try{window.parent.postMessage({rluHeight:h()},"*");}catch(e){}}window.addEventListener("load",post);window.addEventListener("resize",post);try{new ResizeObserver(post).observe(document.body);}catch(e){}setInterval(post,1200);})();
+</script>
+</body>
+</html>
