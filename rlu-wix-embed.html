@@ -16,10 +16,20 @@ href="https://drive.google.com/thumbnail?id=1MNDFhTsYwnmYeMaBP3QXh-WBM-WR3JM8">
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 
 
 <style>
+/* ===== Design tokens — extracted from the live Wix site (blue #0056B3 + Kanit). Change here to re-theme. ===== */
+:root{
+--pk-primary:#0056B3;--pk-accent:#116DFF;--pk-primary-dark:#00478f;
+--pk-text:#1A2A33;--pk-muted:#5B6B75;
+--pk-bg:#F4F7F9;--pk-card:#FFFFFF;--pk-line:#E6EDF2;
+--pk-pass:#1F9D6B;--pk-pass-bg:#E7F6EF;--pk-pass-tx:#15784F;
+--pk-fail:#E5484D;--pk-fail-bg:#FDECEC;--pk-fail-tx:#B0333A;
+--pk-radius:16px;--pk-head:'Kanit',sans-serif;--pk-body:'Prompt',sans-serif;
+}
 
 body{
 font-family:'Prompt',sans-serif;
@@ -726,7 +736,47 @@ font-size:18px;
   font-size:14px;
   line-height:1.8;
 }
-  
+
+/* ===== Landing dashboard — themed to the Wix site (blue + Kanit) via :root tokens. Scoped to home/status only. ===== */
+#statusDash{max-width:1120px;margin:0 auto;}
+#home{font-family:var(--pk-body);color:var(--pk-text);}
+.khero{background:var(--pk-card);border:1px solid var(--pk-line);border-radius:20px;box-shadow:0 4px 20px rgba(16,55,92,0.06);padding:28px 32px;margin-bottom:28px;}
+.khero-stats{display:flex;gap:44px;flex-wrap:wrap;margin-bottom:20px;}
+.khs{display:flex;flex-direction:column;gap:2px;}
+.khn{font-family:var(--pk-head);font-size:46px;font-weight:600;color:var(--pk-text);line-height:1;}
+.khl{font-size:14px;color:var(--pk-muted);font-weight:500;}
+.ok-t{color:var(--pk-pass);} .no-t{color:var(--pk-fail);}
+.khbar{display:flex;gap:6px;height:14px;}
+.khbar i{border-radius:999px;display:block;}
+.khbar .ok-b{background:var(--pk-pass);} .khbar .no-b{background:var(--pk-fail);}
+.ksec{display:flex;align-items:baseline;gap:10px;margin:0 4px 16px;flex-wrap:wrap;}
+.ksec-t{font-family:var(--pk-head);font-size:19px;font-weight:600;color:var(--pk-primary);}
+.ksec-s{font-size:13px;color:var(--pk-muted);}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:32px;}
+.kcard{background:var(--pk-card);border:1px solid var(--pk-line);border-radius:var(--pk-radius);padding:20px;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;}
+.kcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(16,55,92,0.10);border-color:#cfe0ee;}
+.kbadge{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:5px 14px;border-radius:999px;margin-bottom:14px;}
+.kcard.ok .kbadge{background:var(--pk-pass-bg);color:var(--pk-pass-tx);}
+.kcard.no .kbadge{background:var(--pk-fail-bg);color:var(--pk-fail-tx);}
+.kcard.ok .kbadge::before{content:"\2713";font-weight:700;}
+.kcard.no .kbadge::before{content:"\2715";font-weight:700;}
+.kname{font-size:15px;color:var(--pk-text);font-weight:500;min-height:44px;margin-bottom:8px;line-height:1.45;}
+.kval{font-family:var(--pk-head);font-size:34px;font-weight:600;color:var(--pk-text);line-height:1;margin-bottom:12px;}
+.kbar{height:8px;background:#EAEFF3;border-radius:999px;overflow:hidden;margin-bottom:12px;}
+.kbar i{display:block;height:100%;border-radius:999px;}
+.kcard.ok .kbar i{background:var(--pk-pass);}
+.kcard.no .kbar i{background:var(--pk-fail);}
+.kgoal{font-size:13px;color:var(--pk-muted);}
+.kdetail{max-height:0;overflow:hidden;transition:max-height .28s ease;}
+.kcard.open .kdetail{max-height:170px;}
+.krow{font-size:14px;color:var(--pk-text);padding-top:14px;margin-top:14px;border-top:1px solid var(--pk-line);}
+.krow b{color:var(--pk-primary);}
+.kmean{font-size:12.5px;color:var(--pk-muted);margin-top:6px;line-height:1.55;}
+.kmore{font-size:13px;color:var(--pk-primary);margin-top:14px;font-weight:500;}
+.kmore::after{content:" \25BE";}
+.kcard.open .kmore::after{content:" \25B4";}
+@media(max-width:600px){.khero{padding:22px 20px;border-radius:16px;}.khero-stats{gap:26px;}.khn{font-size:38px;}.kgrid{grid-template-columns:1fr;gap:12px;}}
+
 </style>
 
 </head>
@@ -788,20 +838,13 @@ font-size:18px;
 <div id="home">
 <div style="text-align:center;margin-bottom:30px;">
 
-  <h1 style="
-    margin:0;
-    font-weight:600;
-    color:#C9435A;
-    letter-spacing:1px;
-  ">
-    โรงพยาบาลพระปกเกล้า
-  </h1>
+  <img src="logo.png" alt="โรงพยาบาลพระปกเกล้า จังหวัดจันทบุรี" style="max-width:440px;width:82%;height:auto;display:block;margin:6px auto 0;">
 
   <div style="
     width:80px;
     height:3px;
-    background:#C9435A;
-    margin:12px auto;
+    background:var(--pk-primary);
+    margin:16px auto;
     border-radius:2px;
   "></div>
 
@@ -818,201 +861,8 @@ font-size:18px;
 
 </div>
 
-<div class="main-flex">
-
-  <div class="kpi-card-left">
-    <!-- ใส่ content เดิม -->
-  </div>
-
-  <div class="rlu-card">
-    <!-- ใส่ content เดิม -->
-  </div>
-
-</div>
-
-<div style="
-  display:flex;
-  gap:30px;
-  margin-top:30px;
-  flex-wrap:wrap;
-">
-
-  <!-- LEFT -->
-<div style="
-  flex:1;
-  min-width:320px;
-  background:transparent;
-  padding:0px;
-  border-radius:16px;
-  box-shadow:none;
-  text-align:center;
-">
-
-  <h3 style="margin-bottom:15px;">Dashboard KPI</h3>
-
-  <div style="max-width:260px;margin:auto; position:relative;">
-    <canvas id="homeDonut"></canvas>
-  </div>
-
-  <!-- donut summary -->
-  <div id="donutSummary" style="
-    margin-top:15px;
-    font-size:16px;
-    font-weight:500;
-    text-align:center;
-  "></div>
-
-  <div style="margin-top:12px;font-size:18px;font-weight:600;">
-    <span style="color:#4A6FA5;">● ผ่าน</span>
-    &nbsp;&nbsp;
-    <span style="color:#D97B7B;">● ไม่ผ่าน</span>
-  </div>
-
-  <!-- เงินหน้าหลัก -->
-  <div id="homeCostBox" style="margin-top:20px;"></div>
-
-</div>
-  
-  <!-- RIGHT -->
-  <div style="
-    flex:1;
-    min-width:320px;
-    background:transparent;
-    padding:0px;
-    border-radius:16px;
-    box-shadow:none;
-  ">
-
-    <h3 style="text-align:center;">RLU How to</h3>
-
-    <!-- 🔥 คะแนนรวม -->
-<div style="text-align:right;margin-bottom:8px;">
-
-  <div style="
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-family:'Mitr',sans-serif;
-  ">
-    <span style="
-      font-size:12px;
-      color:#888;
-    ">
-      คะแนนรวม
-    </span>
-
-    <span style="
-      font-size:16px;
-      font-weight:600;
-      color:#2E7D32;
-    ">
-      100/100
-    </span>
-
-  </div>
-
-</div>
-
-    <!-- 🔥 พีระมิด -->
-    <div style="margin-top:10px;">
-
-      <div class="pyramid step4" onclick="openStep(4)">
-        <b>STEP 4</b><br>
-        การประเมินผลเชิงประจักษ์<br>
-        <small>35/35 คะแนน</small>
-      </div>
-
-      <div class="pyramid step3" onclick="openStep(3)">
-        <b>STEP 3</b><br>
-        มาตรการและนวัตกรรม IT<br>
-        <small>30/30 คะแนน</small>
-      </div>
-
-      <div class="pyramid step2" onclick="openStep(2)">
-        <b>STEP 2</b><br>
-        วิเคราะห์ข้อมูล<br>
-        <small>15/15 คะแนน</small>
-      </div>
-
-      <div class="pyramid step1" onclick="openStep(1)">
-        <b>STEP 1</b><br>
-        โครงสร้างและนโยบาย<br>
-        <small>20/20 คะแนน</small>
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-<div id="stepModal" style="
-  display:none;
-  position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  background:rgba(0,0,0,0.5);
-  backdrop-filter:blur(6px);
-  z-index:999;
-  justify-content:center;
-  align-items:center;
-">
-
-  <div style="
-    background:white;
-    padding:25px;
-    border-radius:20px;
-    width:500px;
-    max-height:85%;
-    overflow:auto;
-    box-shadow:0 20px 40px rgba(0,0,0,0.2);
-    animation:fadeIn 0.3s ease;
-  ">
-
-    <h3 style="margin-top:0;color:#C9435A;">Document</h3>
-
-    <div id="stepFiles" style="margin-top:15px;"></div>
-
-    <!-- 🔐 ADMIN -->
-    <div class="admin-only" style="margin-top:25px;">
-
-      <h4 style="margin-bottom:10px;">จัดการไฟล์</h4>
-
-      <div id="stepUploadBox" style="
-        display:grid;
-        grid-template-columns:repeat(2,1fr);
-        gap:10px;
-      "></div>
-
-      <button class="btn-modern" onclick="addStepInput()">+ เพิ่มช่อง</button>
-      <button class="btn-modern" onclick="saveStepFiles()">💾 บันทึก</button>
-
-    </div>
-
-    <br>
-    <button class="btn-modern" onclick="closeModal()">ปิด</button>
-
-  </div>
-</div>
-
-<div class="panel">
-
-<div class="feature-section">
-
-  <div class="feature-grid" id="featureGrid">
-    <!-- JS จะ render -->
-  </div>
-
-</div>
-
-<div class="admin-only card" style="margin-top:20px;">
-
-<h3>จัดการ Feature</h3>
-
-<div id="featureForm"></div>
-
-<button class="btn-modern" onclick="saveFeature()">💾 บันทึก</button>
-</div>
-</div> <!-- panel -->
+<!-- NEW clean public status dashboard (hero + KPI cards). Same verified data engine feeds it via renderStatusDash(). -->
+<div id="statusDash"></div>
 
 <!-- BANNER IMAGE REMOVED (was Trat-branded). Add your Phrapokklao banner later:
      <div class="home-banner">
@@ -1572,6 +1422,7 @@ function convertDriveLink(url){
 function renderFeature(){
 
   let grid = document.getElementById("featureGrid");
+  if(!grid) return;
   grid.innerHTML = "";
 
   featureData.forEach((item,i)=>{
@@ -2553,9 +2404,7 @@ let pass = (target == 5) ? percent < 5 : percent >= target;
 
 
 
-let item = { title: title, value: percent.toFixed(2), pass: Boolean(pass) // 🔥 บังคับเป็น true/false 
-
-}; 
+let item = { title: title, value: percent.toFixed(2), pass: Boolean(pass), a: sumA, b: sumB, target: target }; 
 
 
 
@@ -2735,7 +2584,7 @@ function loadHomeSummary(){
   function checkDone(){
     if(count === total && !summaryRendered){
       summaryRendered = true;
-      renderHomeDonut();
+      renderStatusDash();
     }
   }
 
@@ -2811,6 +2660,72 @@ function loadHomeSummary(){
   });
 
 }
+
+// ===== NEW: clean public status dashboard (reads the same passList/failList) =====
+function rluShortName_(t){
+  var names = ["HbA1c","LDL-Cholesterol","Total Cholesterol","Triglycerides","Creatinine"];
+  for(var i=0;i<names.length;i++){ if(t.indexOf(names[i]) >= 0) return names[i]; }
+  return t;
+}
+
+function renderStatusDash(){
+  var host = document.getElementById("statusDash");
+  if(!host) return;
+
+  var all = passList.concat(failList);
+  var items = KPI_LIST.map(function(kpi){
+    var it = all.filter(function(x){ return x.title === kpi.title; })[0];
+    return {
+      short: rluShortName_(kpi.title),
+      value: it ? it.value : "-",
+      pass: it ? it.pass : false,
+      a: it ? (it.a || 0) : 0,
+      b: it ? (it.b || 0) : 0,
+      target: kpi.target
+    };
+  });
+
+  var passN = 0;
+  items.forEach(function(x){ if(x.pass) passN++; });
+  var failN = items.length - passN;
+  var repeat = items.filter(function(x){ return Number(x.target) === 5; });
+  var yearly = items.filter(function(x){ return Number(x.target) !== 5; });
+
+  function card(x){
+    var cls = x.pass ? "ok" : "no";
+    var w = Math.min(parseFloat(x.value) || 0, 100);
+    var goalTxt = (Number(x.target) === 5) ? "เป้าหมาย น้อยกว่า 5%" : "เป้าหมาย มากกว่า 70%";
+    var meaning = (Number(x.target) === 5) ? "ยิ่งน้อยยิ่งดี — สะท้อนการตรวจซ้ำที่อาจไม่จำเป็น" : "ยิ่งมากยิ่งดี — ผู้ป่วยได้รับการตรวจตามมาตรฐาน";
+    var badge = x.pass ? "ผ่าน" : "ไม่ผ่าน";
+    return '<div class="kcard ' + cls + '" onclick="toggleKpi(this)">'
+      + '<span class="kbadge">' + badge + '</span>'
+      + '<div class="kname">' + x.short + '</div>'
+      + '<div class="kval">' + x.value + '%</div>'
+      + '<div class="kbar"><i style="width:' + w + '%"></i></div>'
+      + '<div class="kgoal">' + goalTxt + '</div>'
+      + '<div class="kdetail"><div class="krow">ตัวตั้ง <b>' + Number(x.a).toLocaleString() + '</b> / ตัวหาร <b>' + Number(x.b).toLocaleString() + '</b></div><div class="kmean">' + meaning + '</div></div>'
+      + '<div class="kmore">ดูรายละเอียด</div>'
+      + '</div>';
+  }
+
+  function section(title, sub, arr){
+    if(!arr.length) return '';
+    return '<div class="ksec"><span class="ksec-t">' + title + '</span><span class="ksec-s">' + sub + '</span></div>'
+      + '<div class="kgrid">' + arr.map(card).join('') + '</div>';
+  }
+
+  var hero = '<div class="khero"><div class="khero-stats">'
+    + '<div class="khs"><span class="khn ok-t">' + passN + '</span><span class="khl">ผ่าน</span></div>'
+    + '<div class="khs"><span class="khn no-t">' + failN + '</span><span class="khl">ไม่ผ่าน</span></div>'
+    + '<div class="khs"><span class="khn">' + items.length + '</span><span class="khl">ทั้งหมด</span></div>'
+    + '</div><div class="khbar"><i class="ok-b" style="flex:' + (passN||0.001) + '"></i><i class="no-b" style="flex:' + (failN||0.001) + '"></i></div></div>';
+
+  host.innerHTML = hero
+    + section("ตรวจซ้ำเร็วเกินจำเป็น", "เป้าหมาย น้อยกว่า 5%", repeat)
+    + section("ตรวจครบตามรอบปี", "เป้าหมาย มากกว่า 70%", yearly);
+}
+
+function toggleKpi(el){ el.classList.toggle("open"); }
 
 function renderHomeDonut(){
 
