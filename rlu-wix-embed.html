@@ -758,6 +758,8 @@ font-size:18px;
 .kbadge{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:5px 14px;border-radius:999px;margin-bottom:14px;}
 .kcard.ok .kbadge{background:var(--pk-pass-bg);color:var(--pk-pass-tx);}
 .kcard.no .kbadge{background:var(--pk-fail-bg);color:var(--pk-fail-tx);}
+.kcard.nd .kbadge{background:#EEF1F4;color:#5B6B75;} .kcard.nd .kbar i{background:#C7D0D7;} .kcard.nd .kval{color:#9AA7B0;}
+.khn.nd-t{color:#8A97A0;} .khbar .nd-b{background:#C7D0D7;}
 .kcard.ok .kbadge::before{content:"\2713";font-weight:700;}
 .kcard.no .kbadge::before{content:"\2715";font-weight:700;}
 .kname{font-size:15px;color:var(--pk-text);font-weight:500;min-height:44px;margin-bottom:8px;line-height:1.45;}
@@ -1395,10 +1397,6 @@ if(page=="kpi"){
 
   if(page=="home"){
     loadHomeSummary();
-  }
-
-  if(page=="home"){
-    loadHomeSummary();
     loadFeature();
   }
 
@@ -1576,7 +1574,10 @@ function uploadKPI(type){
 //  - "ซ้ำ 90 วัน" tables have a consolidated record under hospcode 10664 -> use it
 //  - "ปีละครั้ง" tables have no 10664 record -> sum อำเภอเมือง (areacode 2201*)
 function toCupRow(data){
-  if(!Array.isArray(data)) return data;
+  // HDC API may return a bare list [...] (old) or wrapped {data:[...]} (new, 2026-07). Accept both.
+  if(data && !Array.isArray(data) && Array.isArray(data.data)) data = data.data;
+  // Still not a list (e.g. API throttled/errored) -> empty CUP row so nothing crashes.
+  if(!Array.isArray(data)) return [{ hospcode: "10664", a: 0, b: 0, _nodata: true }];
   var has = data.some(function(r){ return String(r.hospcode) === "10664"; });
   var a = 0, b = 0;
   data.forEach(function(r){
@@ -2404,17 +2405,12 @@ let pass = (target == 5) ? percent < 5 : percent >= target;
 
 
 
-let item = { title: title, value: percent.toFixed(2), pass: Boolean(pass), a: sumA, b: sumB, target: target }; 
+let nodata = (sumB === 0);   // no denominator = HDC returned nothing (e.g. throttled) -> don't fake a pass/fail
+let item = { title: title, value: nodata ? "-" : percent.toFixed(2), pass: Boolean(pass), a: sumA, b: sumB, target: target, nodata: nodata };
 
-
-
-if(pass === true){ 
-
-passList.push(item); }else{ 
-
-failList.push(item); 
-
-} 
+if(nodata){ failList.push(item); }
+else if(pass === true){ passList.push(item); }
+else{ failList.push(item); }
 
 
 
@@ -2681,20 +2677,31 @@ function renderStatusDash(){
       pass: it ? it.pass : false,
       a: it ? (it.a || 0) : 0,
       b: it ? (it.b || 0) : 0,
-      target: kpi.target
+      target: kpi.target,
+      nodata: it ? (it.nodata || false) : true
     };
   });
 
-  var passN = 0;
-  items.forEach(function(x){ if(x.pass) passN++; });
-  var failN = items.length - passN;
+  var passN = 0, failN = 0, ndN = 0;
+  items.forEach(function(x){ if(x.nodata) ndN++; else if(x.pass) passN++; else failN++; });
   var repeat = items.filter(function(x){ return Number(x.target) === 5; });
   var yearly = items.filter(function(x){ return Number(x.target) !== 5; });
 
   function card(x){
+    var goalTxt = (Number(x.target) === 5) ? "เป้าหมาย น้อยกว่า 5%" : "เป้าหมาย มากกว่า 70%";
+    if(x.nodata){
+      return '<div class="kcard nd" onclick="toggleKpi(this)">'
+        + '<span class="kbadge">ไม่มีข้อมูล</span>'
+        + '<div class="kname">' + x.short + '</div>'
+        + '<div class="kval">–</div>'
+        + '<div class="kbar"><i style="width:100%"></i></div>'
+        + '<div class="kgoal">' + goalTxt + '</div>'
+        + '<div class="kdetail"><div class="krow">ข้อมูลจาก HDC ยังไม่พร้อมในขณะนี้</div><div class="kmean">โปรดรีเฟรชหน้าอีกครั้ง (ระบบ HDC อาจจำกัดจำนวนคำขอชั่วคราว)</div></div>'
+        + '<div class="kmore">รีเฟรชเพื่อลองใหม่</div>'
+        + '</div>';
+    }
     var cls = x.pass ? "ok" : "no";
     var w = Math.min(parseFloat(x.value) || 0, 100);
-    var goalTxt = (Number(x.target) === 5) ? "เป้าหมาย น้อยกว่า 5%" : "เป้าหมาย มากกว่า 70%";
     var meaning = (Number(x.target) === 5) ? "ยิ่งน้อยยิ่งดี — สะท้อนการตรวจซ้ำที่อาจไม่จำเป็น" : "ยิ่งมากยิ่งดี — ผู้ป่วยได้รับการตรวจตามมาตรฐาน";
     var badge = x.pass ? "ผ่าน" : "ไม่ผ่าน";
     return '<div class="kcard ' + cls + '" onclick="toggleKpi(this)">'
@@ -2714,11 +2721,14 @@ function renderStatusDash(){
       + '<div class="kgrid">' + arr.map(card).join('') + '</div>';
   }
 
+  var ndStat = ndN>0 ? '<div class="khs"><span class="khn nd-t">' + ndN + '</span><span class="khl">ไม่มีข้อมูล</span></div>' : '';
+  var ndBar = ndN>0 ? '<i class="nd-b" style="flex:' + ndN + '"></i>' : '';
   var hero = '<div class="khero"><div class="khero-stats">'
     + '<div class="khs"><span class="khn ok-t">' + passN + '</span><span class="khl">ผ่าน</span></div>'
     + '<div class="khs"><span class="khn no-t">' + failN + '</span><span class="khl">ไม่ผ่าน</span></div>'
+    + ndStat
     + '<div class="khs"><span class="khn">' + items.length + '</span><span class="khl">ทั้งหมด</span></div>'
-    + '</div><div class="khbar"><i class="ok-b" style="flex:' + (passN||0.001) + '"></i><i class="no-b" style="flex:' + (failN||0.001) + '"></i></div></div>';
+    + '</div><div class="khbar"><i class="ok-b" style="flex:' + (passN||0.001) + '"></i><i class="no-b" style="flex:' + (failN||0.001) + '"></i>' + ndBar + '</div></div>';
 
   host.innerHTML = hero
     + section("ตรวจซ้ำเร็วเกินจำเป็น", "เป้าหมาย น้อยกว่า 5%", repeat)
